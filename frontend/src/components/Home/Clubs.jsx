@@ -14,7 +14,7 @@ const Clubs = () => {
     isLoading,
     isError,
     data: clubs = [],
-    refetch,
+    // refetch,
   } = useQuery({
     queryKey: ["clubs"],
     queryFn: async () => {

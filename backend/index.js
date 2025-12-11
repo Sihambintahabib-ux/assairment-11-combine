@@ -4,6 +4,9 @@ require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const admin = require("firebase-admin");
 const port = process.env.PORT || 3000;
+//add strine key :
+const stripe = require("stripe")(process.env.STRIPE_KEY);
+
 const decoded = Buffer.from(process.env.FB_SERVICE_KEY, "base64").toString(
   "utf-8"
 );
@@ -46,8 +49,6 @@ const verifyJWT = async (req, res, next) => {
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const url = process.env.MONGODB_URI;
 
-// const url = `mongodb+srv://assairment11:ulvO0P03K1Jeo63I@cluster0.hohlyvu.mongodb.net/?appName=Cluster0`;
-
 const client = new MongoClient(url, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -55,32 +56,55 @@ const client = new MongoClient(url, {
     deprecationErrors: true,
   },
 });
+
 async function run() {
   try {
     //db collection: clubsCollection
     const db = client.db("clubsdb");
     const clubsCollection = db.collection("clubs");
-    //save add-club to db
+    //!=============START===========!//
+
+    //*save add-club to db
     app.post("/clubs", async (req, res) => {
       const clubData = req.body; //plantsdata =1.5
       console.log(clubData);
       const result = await clubsCollection.insertOne(clubData);
       res.send(result);
     });
-    // get all club from db
+    // *get all club from db
     app.get("/clubs", async (req, res) => {
       const result = await clubsCollection.find().toArray();
       console.log(result);
       res.send(result);
     });
 
-    // get one club from db
+    // *get one club from db
     app.get("/clubs/:id", async (req, res) => {
       const id = req.params.id;
       const result = await clubsCollection.findOne({ _id: new ObjectId(id) });
       console.log(result);
       res.send(result);
     });
+
+    // STRIPE Payment :
+    app.post("/create-checkout-session", async (req, res) => {
+      const paymentInfo = req.body;
+      console.log("steipes", paymentInfo);
+      res.send(paymentInfo);
+      // const session = await stripe.checkout.sessions.create({
+      //   line_items: [
+      //     {
+      //       // Provide the exact Price ID (for example, price_1234) of the product you want to sell
+      //       price: "{{PRICE_ID}}",
+      //       quantity: 1,
+      //     },
+      //   ],
+      //   mode: "payment",
+      //   success_url: `${YOUR_DOMAIN}?success=true`,
+      // });
+    });
+
+    //!=============END===========!//
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(

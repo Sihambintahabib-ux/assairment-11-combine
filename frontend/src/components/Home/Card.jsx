@@ -60,7 +60,7 @@ const Card = ({ club }) => {
           </div>
           <div>
             <Link
-              to={`/club/${_id}`}
+              to={`/clubs/${_id}`}
               className="  p-3 m- text-center bg-amber-100 w-full rounded-xl"
               // className="col-span-1  p-3 m- text-center bg-amber-100 w-full rounded-xl"
             >

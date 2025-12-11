@@ -1,21 +1,42 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import useAuth from "../../hooks/useAuth";
+import axios from "axios";
 
 const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
   // Total Price Calculation
   console.log(clubs);
   console.log(id);
+  const { user } = useAuth();
+  console.log(user);
   const {
-    // _id,
+    _id,
     // bannerImage,
     category,
     clubName,
     // description,
-    location,
+    // location,
     // managerEmail,
     membershipFee,
     // status,
     // updateAt,
   } = clubs || {};
+  const email = user.email;
+  const handlePayment = async () => {
+    const PaymentInfo = {
+      // clubId: new ObjectId(_id),
+      clubId: _id,
+      userEmail: email,
+      clubName,
+      membershipFee,
+      joinedAt: new Date(),
+      expiresAt: new Date(),
+    };
+    const result = await axios.post(
+      `${import.meta.env.VITE_API_URL}/create-checkout-session`,
+      PaymentInfo
+    );
+    console.log(result.data);
+  };
   return (
     <Dialog
       open={isOpen}
@@ -33,7 +54,7 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
               as="h3"
               className="text-lg font-medium text-center leading-6 text-gray-900"
             >
-              Review Info Before Purchase
+              Review Info Before Join the club
             </DialogTitle>
             <div className="mt-2">
               <p className="text-sm text-gray-500">Plant: {clubName}</p>
@@ -42,7 +63,9 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
               <p className="text-sm text-gray-500">Category: {category}</p>
             </div>
             <div className="mt-2">
-              <p className="text-sm text-gray-500">location: {location}</p>
+              <p className="text-sm text-gray-500">
+                Join member : {user.displayName}
+              </p>
             </div>
 
             <div className="mt-2">
@@ -53,10 +76,11 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
             </div>
             <div className="flex mt-2 justify-around">
               <button
+                onClick={handlePayment}
                 type="button"
                 className="cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
               >
-                Pay
+                Join
               </button>
               <button
                 type="button"

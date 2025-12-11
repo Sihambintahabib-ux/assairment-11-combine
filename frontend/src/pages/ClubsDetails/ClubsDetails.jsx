@@ -9,10 +9,10 @@ import { useQuery } from "@tanstack/react-query";
 
 import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 import ErrorPage from "../ErrorPage";
-import useAuth from "../../hooks/useAuth";
+// import useAuth from "../../hooks/useAuth";
 
 const ClubsDetails = () => {
-  const { user } = useAuth();
+  // const { user } = useAuth();
   let [isOpen, setIsOpen] = useState(false);
   const { id } = useParams();
   console.log(id);
