@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const admin = require("firebase-admin");
 const port = process.env.PORT || 3000;
 const decoded = Buffer.from(process.env.FB_SERVICE_KEY, "base64").toString(
@@ -70,6 +70,14 @@ async function run() {
     // get all club from db
     app.get("/clubs", async (req, res) => {
       const result = await clubsCollection.find().toArray();
+      console.log(result);
+      res.send(result);
+    });
+
+    // get one club from db
+    app.get("/clubs/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await clubsCollection.findOne({ _id: new ObjectId(id) });
       console.log(result);
       res.send(result);
     });

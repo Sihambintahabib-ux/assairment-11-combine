@@ -1,12 +1,12 @@
-import Plants from '../../components/Home/Plants'
+import Clubs from "../../components/Home/clubs";
 
 const Home = () => {
   return (
     <div>
-      <Plants />
+      <Clubs></Clubs>
       {/* More components */}
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
