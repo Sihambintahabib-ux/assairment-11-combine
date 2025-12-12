@@ -76,8 +76,8 @@ const AddPlantForm = () => {
         description,
         category,
         location,
-        membershipFee: parseInt(price),
-        status: "pending",
+        membershipFee: Number(price),
+        status: "Pending",
         // quantity,
         managerEmail: user.email,
         createAt: new Date(),
@@ -118,7 +118,7 @@ const AddPlantForm = () => {
                 Name
               </label>
               <input
-                className="w-full px-4 py-3 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white"
+                className="w-full px-4 py-3 text-gray-800 border border-orange-400 focus:outline-orange-400rounded-md bg-white"
                 id="name"
                 type="text"
                 placeholder="Club Name"
@@ -139,7 +139,7 @@ const AddPlantForm = () => {
               <textarea
                 id="description"
                 placeholder="Write plant description here..."
-                className="block rounded-md focus:lime-300 w-full h-32 px-4 py-3 text-gray-800  border border-lime-300 bg-white focus:outline-lime-500 "
+                className="block rounded-md focus:lime-300 w-full h-32 px-4 py-3 text-gray-800  border border-orange-400 bg-white focus:outline-orange-400 "
                 name="description"
                 {...register("description", {
                   required: "description is required",
@@ -157,7 +157,7 @@ const AddPlantForm = () => {
                 Category
               </label>
               <select
-                className="w-full px-4 py-3 border-lime-300 focus:outline-lime-500 rounded-md bg-white"
+                className="w-full px-4 py-3 border-orange-400 focus:outline-orange-400 rounded-md bg-white"
                 {...register("category", { required: "category is required" })}
               >
                 <option value="photography">photography</option>
@@ -177,7 +177,7 @@ const AddPlantForm = () => {
                 location
               </label>
               <select
-                className="w-full px-4 py-3 border-lime-300 focus:outline-lime-500 rounded-md bg-white"
+                className="w-full px-4 py-3 border-orange-400 focus:bg-orange-400 rounded-md bg-white"
                 {...register("location", { required: "location is required" })}
               >
                 <option value="bashabo">bashabo</option>
@@ -201,7 +201,7 @@ const AddPlantForm = () => {
                   Price
                 </label>
                 <input
-                  className="w-full px-4 py-3 text-gray-800 border border-lime-300 focus:outline-lime-500 rounded-md bg-white"
+                  className="w-full px-4 py-3 text-gray-800 border border-orange-400 focus:outline-orange-400 rounded-md bg-white"
                   id="price"
                   type="number"
                   placeholder="Price per unit"
@@ -258,7 +258,7 @@ const AddPlantForm = () => {
                         {errors.image.message}
                       </p>
                     )}
-                    <div className="bg-lime-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-lime-500">
+                    <div className=" bg-orange-400 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hove:bg-orange-400">
                       Upload
                     </div>
                   </label>
@@ -270,7 +270,7 @@ const AddPlantForm = () => {
             <button
               type="submit"
               onSubmit={handleSubmit}
-              className="w-full cursor-pointer p-3 mt-5 text-center font-medium text-white transition duration-200 rounded shadow-md bg-lime-500 "
+              className="w-full cursor-pointer p-3 mt-5 text-center font-medium text-white transition duration-200 rounded shadow-md  bg-orange-400 "
             >
               {isPending ? (
                 <TbFidgetSpinner className="animate-spin m-auto" />

@@ -10,14 +10,14 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
   console.log(user);
   const {
     _id,
-    // bannerImage,
+    bannerImage,
     category,
     clubName,
     // description,
     // location,
     // managerEmail,
     membershipFee,
-    // status,
+    status,
     // updateAt,
   } = clubs || {};
   const email = user.email;
@@ -28,6 +28,8 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
       userEmail: email,
       clubName,
       membershipFee,
+      status,
+      bannerImage,
       joinedAt: new Date(),
       expiresAt: new Date(),
     };
@@ -35,7 +37,11 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
       `${import.meta.env.VITE_API_URL}/create-checkout-session`,
       PaymentInfo
     );
+    console.log(result);
     console.log(result.data);
+    console.log(result.data.url);
+    // add - payment address :
+    window.location.href = result.data.url;
   };
   return (
     <Dialog

@@ -15,6 +15,7 @@ import ManageOrders from "../pages/Dashboard/Seller/ManageOrders";
 import MyOrders from "../pages/Dashboard/Customer/MyOrders";
 import { createBrowserRouter } from "react-router";
 import Clubs from "../components/Home/clubs";
+import PaymentSuccess from "../Payment/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -26,14 +27,18 @@ export const router = createBrowserRouter([
         path: "/",
         element: <Home />,
       },
+      {
+        path: "/clubs",
+        element: <Clubs />,
+      },
 
       {
         path: "/clubs/:id",
         element: <ClubsDetails />,
       },
       {
-        path: "/clubs",
-        element: <Clubs />,
+        path: "/payment-success",
+        element: <PaymentSuccess />,
       },
     ],
   },
@@ -89,7 +94,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "my-orders",
+        path: "my-clubs", // my-clubs // my-orders
         element: (
           <PrivateRoute>
             <MyOrders />

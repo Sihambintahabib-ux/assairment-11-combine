@@ -27,13 +27,17 @@ const Clubs = () => {
   if (isError) return <ErrorPage></ErrorPage>;
   return (
     <Container>
-      <div>
-        <h1 className="text-4xl mt-7 text-center font-bold text-primary-700 cursor-pointer">
+      <div className="text-center">
+        <h1 className="text-7xl mt-7 text-center font-medium text-primary-700 border-b-3 border-red-400 inline  cursor-pointer">
           Club
         </h1>
       </div>
       {clubs && clubs.length > 0 ? (
-        <div className="pt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8">
+        <div
+          className="pt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4   xl:grid-cols-5  2xl:grid-cols-6 
+
+        gap-8"
+        >
           {console.log("inner", clubs)}
           {clubs.map((club) => (
             <Card key={club._id} club={club} />

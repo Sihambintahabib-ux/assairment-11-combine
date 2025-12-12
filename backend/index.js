@@ -1,7 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const {
+  MongoClient,
+  ServerApiVersion,
+  ObjectId,
+  deserialize,
+} = require("mongodb");
 const admin = require("firebase-admin");
 const port = process.env.PORT || 3000;
 //add strine key :
@@ -20,9 +25,10 @@ const app = express();
 app.use(
   cors({
     origin: [
-      "http://localhost:5173",
-      "http://localhost:5174",
-      "https://b12-m11-session.web.app",
+      process.env.CLIENT_URL,
+      // "http://localhost:5173",
+      // "http://localhost:5174",
+      // "https://b12-m11-session.web.app",
     ],
     credentials: true,
     optionSuccessStatus: 200,
@@ -82,7 +88,7 @@ async function run() {
     app.get("/clubs/:id", async (req, res) => {
       const id = req.params.id;
       const result = await clubsCollection.findOne({ _id: new ObjectId(id) });
-      console.log(result);
+      // console.log("get - /clubs/:id", result);
       res.send(result);
     });
 
@@ -90,18 +96,42 @@ async function run() {
     app.post("/create-checkout-session", async (req, res) => {
       const paymentInfo = req.body;
       console.log("steipes", paymentInfo);
-      res.send(paymentInfo);
-      // const session = await stripe.checkout.sessions.create({
-      //   line_items: [
-      //     {
-      //       // Provide the exact Price ID (for example, price_1234) of the product you want to sell
-      //       price: "{{PRICE_ID}}",
-      //       quantity: 1,
-      //     },
-      //   ],
-      //   mode: "payment",
-      //   success_url: `${YOUR_DOMAIN}?success=true`,
-      // });
+      // res.send(paymentInfo);
+
+      const session = await stripe.checkout.sessions.create({
+        line_items: [
+          {
+            // Provide the exact Price ID (for example, price_1234) of the product you want to sell
+            price_data: {
+              currency: "usd",
+              product_data: {
+                // name: paymentInfo?.name, //clubName
+                name: paymentInfo?.clubName, //clubName
+
+                // description: paymentInfo.description, // comment - not needed
+                // images: [paymentInfo?.images], //bannerImage comment - not needed
+                images: [paymentInfo?.bannerImage], //bannerImage comment - not needed
+              },
+              // unit_amount: paymentInfo?.price * 100, //membershipFee
+              unit_amount: paymentInfo?.membershipFee * 100, //membershipFee
+            },
+            quantity: 1, // comment - not needed
+          },
+        ],
+        customer_email: paymentInfo?.userEmail, // userEmail
+        mode: "payment",
+        metadata: {
+          // plantId: paymentInfo?.plantId, //clubId
+          clubId: paymentInfo?.clubId, //clubId
+          member_email: paymentInfo?.userEmail, // userEmail
+
+          // status: paymentInfo?.status,
+        },
+        success_url: `${process.env.CLIENT_URL}/payment-success`,
+        cancel_url: `${process.env.CLIENT_URL}/clubs/${paymentInfo?.clubId}`,
+      });
+      // res.send(paymentInfo)
+      res.send({ url: session.url });
     });
 
     //!=============END===========!//
