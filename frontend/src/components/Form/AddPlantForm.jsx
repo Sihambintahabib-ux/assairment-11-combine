@@ -77,7 +77,7 @@ const AddPlantForm = () => {
         category,
         location,
         membershipFee: Number(price),
-        status: "Pending",
+        status: "pending",
         // quantity,
         managerEmail: user.email,
         createAt: new Date(),

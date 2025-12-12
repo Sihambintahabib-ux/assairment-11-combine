@@ -1,7 +1,21 @@
 import React from "react";
-import { Link } from "react-router";
+import { useEffect } from "react";
+import { Link, useSearchParams } from "react-router";
+import axios from "axios";
 
 const PaymentSuccess = () => {
+  const [searchParams] = useSearchParams();
+
+  const sessionId = searchParams.get("session_id");
+  console.log(sessionId);
+  useEffect(() => {
+    if (sessionId) {
+      // fetch
+      axios.post(`${import.meta.env.VITE_API_URL}/payment-success`, {
+        sessionId,
+      });
+    }
+  }, [sessionId]);
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="bg-white p-10 rounded-lg shadow-lg text-center">
