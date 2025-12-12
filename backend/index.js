@@ -92,7 +92,7 @@ async function run() {
       res.send(result);
     });
 
-    // STRIPE Payment :
+    //* STRIPE Payment :
     app.post("/create-checkout-session", async (req, res) => {
       const paymentInfo = req.body;
       console.log("steipes", paymentInfo);
@@ -127,13 +127,43 @@ async function run() {
 
           // status: paymentInfo?.status,
         },
-        success_url: `${process.env.CLIENT_URL}/payment-success`,
+        success_url: `${process.env.CLIENT_URL}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${process.env.CLIENT_URL}/clubs/${paymentInfo?.clubId}`,
       });
-      // res.send(paymentInfo)
+      // res.send(paymentInfo);
       res.send({ url: session.url });
     });
 
+    //*payment-success
+    app.post("/payment-success", async (req, res) => {
+      const { sessionId } = req.body;
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      const club = await clubsCollection.findOne({
+        _id: new ObjectId(session.metadata.clubId),
+      });
+
+      console.log(session);
+      if (session.status === "complete") {
+        // save data to db
+        const membershipInfo = {
+          userEmail: session.metadata.member_email,
+          clubId: session.metadata.clubId,
+          transactionId: session.payment_intent, //
+          // status: session,
+          status: "pending",
+          paymentId: session.id,
+          joinedAt: new Date(),
+          // expiresAt: session,
+          clubName: club.clubName,
+          // images00: club.images,
+          images: club.bannerImage,
+          // membershipFeeFees00: club.unit_amount,
+          membershipFeeFees: session.amount_total / 100,
+        };
+        console.log(membershipInfo);
+      }
+      // res.send(result);
+    });
     //!=============END===========!//
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
