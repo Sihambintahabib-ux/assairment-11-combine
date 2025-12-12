@@ -68,6 +68,8 @@ async function run() {
     //db collection: clubsCollection
     const db = client.db("clubsdb");
     const clubsCollection = db.collection("clubs");
+    const membershipsCollection = db.collection("memberships");
+
     //!=============START===========!//
 
     //*save add-club to db
@@ -143,26 +145,39 @@ async function run() {
       });
 
       console.log(session);
-      if (session.status === "complete") {
+      // check dublicate data
+      const joined = await membershipsCollection.findOne({
+        transactionId: session.payment_intent,
+      });
+
+      if (session.status === "complete" && club && !joined) {
         // save data to db
         const membershipInfo = {
-          userEmail: session.metadata.member_email,
           clubId: session.metadata.clubId,
-          transactionId: session.payment_intent, //
-          // status: session,
-          status: "pending",
-          paymentId: session.id,
-          joinedAt: new Date(),
-          // expiresAt: session,
           clubName: club.clubName,
           // images00: club.images,
-          images: club.bannerImage,
-          // membershipFeeFees00: club.unit_amount,
+          userEmail: session.metadata.member_email,
+          status: "pending",
+          transactionId: session.payment_intent, //
+          paymentId: session.id,
           membershipFeeFees: session.amount_total / 100,
+          // status: session,
+          // joinedAt: new Date(),//
+          // expiresAt: session, //
+          // images: club.bannerImage,
+          // membershipFeeFees00: club.unit_amount,
         };
         console.log(membershipInfo);
+        const result = await membershipsCollection.insertOne(membershipInfo);
+        return res.send({
+          transactionId: session.payment_intent,
+          joinedId: joined.insertedId,
+        });
       }
-      // res.send(result);
+      res.send({
+        transactionId: session.payment_intent,
+        joinedId: joined._id,
+      });
     });
     //!=============END===========!//
     // Send a ping to confirm a successful connection
