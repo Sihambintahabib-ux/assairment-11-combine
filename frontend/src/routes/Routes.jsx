@@ -5,17 +5,22 @@ import SignUp from "../pages/SignUp/SignUp";
 import ClubsDetails from "../pages/ClubsDetails/ClubsDetails";
 import PrivateRoute from "./PrivateRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
-import AddPlant from "../pages/Dashboard/Seller/AddPlant";
-import ManageUsers from "../pages/Dashboard/Admin/ManageUsers";
+import AddPlant from "../pages/Dashboard/Manager/Addclubs";
+import ManageUsers from "../pages/Dashboard/Admin/AdminUsers";
 import Profile from "../pages/Dashboard/Common/Profile";
 import Statistics from "../pages/Dashboard/Common/Statistics";
 import MainLayout from "../layouts/MainLayout";
-import MyInventory from "../pages/Dashboard/Seller/MyInventory";
-import ManageOrders from "../pages/Dashboard/Seller/ManageOrders";
-import MyOrders from "../pages/Dashboard/Customer/MyOrders";
+
+// import MyOrders from "../pages/Dashboard/Customer/MyOrders";
 import { createBrowserRouter } from "react-router";
-import Clubs from "../components/Home/clubs";
 import PaymentSuccess from "../Payment/PaymentSuccess";
+import MyClubs from "../pages/Dashboard/Customer/MyClubs";
+import Clubs from "../components/Home/clubs";
+import ClubMembers from "../pages/Dashboard/Manager/ClubMembers";
+import Addclubs from "../pages/Dashboard/Manager/Addclubs";
+import AdminUsers from "../pages/Dashboard/Admin/AdminUsers";
+import AdminClubs from "../pages/Dashboard/Admin/AdminClubs";
+import ManagerClubs from "../pages/Dashboard/Manager/managerclubs";
 
 export const router = createBrowserRouter([
   {
@@ -62,26 +67,34 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "add-plant",
+        path: "add-club",
         element: (
           <PrivateRoute>
-            <AddPlant />
+            <Addclubs></Addclubs>
           </PrivateRoute>
         ),
       },
       {
-        path: "my-inventory",
+        path: "clubmembers",
         element: (
           <PrivateRoute>
-            <MyInventory />
+            <ClubMembers></ClubMembers>
           </PrivateRoute>
         ),
       },
       {
-        path: "manage-users",
+        path: "managerClubs",
         element: (
           <PrivateRoute>
-            <ManageUsers />
+            <ManagerClubs></ManagerClubs>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "admin-users",
+        element: (
+          <PrivateRoute>
+            <AdminUsers />
           </PrivateRoute>
         ),
       },
@@ -97,13 +110,14 @@ export const router = createBrowserRouter([
         path: "my-clubs", // my-clubs // my-orders
         element: (
           <PrivateRoute>
-            <MyOrders />
+            {/* <MyOrders /> */}
+            <MyClubs></MyClubs>
           </PrivateRoute>
         ),
       },
       {
-        path: "manage-orders",
-        element: <ManageOrders />,
+        path: "admin-clubs",
+        element: <AdminClubs></AdminClubs>,
       },
     ],
   },

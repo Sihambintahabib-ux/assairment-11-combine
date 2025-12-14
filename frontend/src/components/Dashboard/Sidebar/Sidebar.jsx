@@ -11,8 +11,8 @@ import { BsGraphUp } from "react-icons/bs";
 // User Menu
 import MenuItem from "./Menu/MenuItem";
 import AdminMenu from "./Menu/AdminMenu";
-import SellerMenu from "./Menu/SellerMenu";
-import CustomerMenu from "./Menu/CustomerMenu";
+import ManagersMenu from "./Menu/ManagersMenu";
+import MembersMenu from "./Menu/MembersMenu";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
@@ -74,9 +74,9 @@ const Sidebar = () => {
                 address="/dashboard"
               />
               {/* Role-Based Menu */}
-              <CustomerMenu />
-              <SellerMenu />
+              <MembersMenu />
               <AdminMenu />
+              <ManagersMenu />
             </nav>
           </div>
 

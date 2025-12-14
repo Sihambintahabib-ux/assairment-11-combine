@@ -46,12 +46,12 @@ const Card = ({ club }) => {
         </div>
 
         {/* Button */}
-        <Link
-          to={`/clubs/${_id}`}
+        <button
+          // to={`/clubs/${_id}`}
           className="w-full text-center py-2 rounded-xl bg-orange-400 hover:bg-orange-700 transition font-semibold shadow"
         >
           View Details
-        </Link>
+        </button>
       </div>
     </Link>
   );

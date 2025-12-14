@@ -1,12 +1,12 @@
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
-const SellerOrderDataRow = ({ data }) => {
-  console.log("SellerOrderDataRow- admin club", data);
+const ManagerClubDataRow = ({ data }) => {
+  console.log("ManagerClubDataRow- admin club", data);
   const {
     clubName,
     managerEmail,
     membershipFee,
-
+    location,
     status,
     bannerImage,
     category,
@@ -16,7 +16,7 @@ const SellerOrderDataRow = ({ data }) => {
 
   return (
     <tr>
-      {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex items-center">
           <div className="shrink-0">
             <div className="block relative">
@@ -28,9 +28,9 @@ const SellerOrderDataRow = ({ data }) => {
             </div>
           </div>
         </div>
-      </td> */}
+      </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">{clubName}</p>
+        <p className="text-red-900 ">{clubName}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 ">{managerEmail}</p>
@@ -39,9 +39,9 @@ const SellerOrderDataRow = ({ data }) => {
         <p className="text-gray-900 ">{membershipFee}</p>
       </td>
 
-      {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">Dhaka</p>
-      </td> */}
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <p className="text-gray-900 ">{location}</p>
+      </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 ">{category}</p>
       </td>
@@ -77,4 +77,4 @@ const SellerOrderDataRow = ({ data }) => {
   );
 };
 
-export default SellerOrderDataRow;
+export default ManagerClubDataRow;

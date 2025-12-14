@@ -67,8 +67,8 @@ async function run() {
   try {
     //db collection: clubsCollection
     const db = client.db("clubsdb");
-    const clubsCollection = db.collection("clubs");
-    const membershipsCollection = db.collection("memberships");
+    const clubsCollection = db.collection("clubs"); // plantsCollection
+    const membershipsCollection = db.collection("memberships"); // ordersCollection
 
     //!=============START===========!//
 
@@ -136,49 +136,103 @@ async function run() {
       res.send({ url: session.url });
     });
 
-    //*payment-success
+    //*post membershipsCollection (payment-success)
     app.post("/payment-success", async (req, res) => {
       const { sessionId } = req.body;
+      // const sessionIsssd = req.body;
       const session = await stripe.checkout.sessions.retrieve(sessionId);
+      // console.log("object", sessionIsssd);
       const club = await clubsCollection.findOne({
         _id: new ObjectId(session.metadata.clubId),
+        // clubId: session.metadata.clubId,
       });
 
-      console.log(session);
+      // console.log(session);
+      console.log("club------->>>>>", club);
+
       // check dublicate data
-      const joined = await membershipsCollection.findOne({
+      const joinedmember = await membershipsCollection.findOne({
         transactionId: session.payment_intent,
       });
 
-      if (session.status === "complete" && club && !joined) {
+      if (session.status === "complete" && club && !joinedmember) {
         // save data to db
         const membershipInfo = {
           clubId: session.metadata.clubId,
           clubName: club.clubName,
           // images00: club.images,
           userEmail: session.metadata.member_email,
-          status: "pending",
+          managerEmail: club?.managerEmail,
+
+          status: "active",
           transactionId: session.payment_intent, //
           paymentId: session.id,
-          membershipFeeFees: session.amount_total / 100,
+          membershipFee: session.amount_total / 100,
           // status: session,
-          // joinedAt: new Date(),//
-          // expiresAt: session, //
-          // images: club.bannerImage,
+          joinedAt: new Date().toLocaleDateString("en-IN"), //
+          expiresAt: new Date().toLocaleDateString("en-IN"), //
+          bannerImage: club.bannerImage,
+          description: club.description,
+          location: club.location,
+          category: club.category,
+
           // membershipFeeFees00: club.unit_amount,
         };
         console.log(membershipInfo);
         const result = await membershipsCollection.insertOne(membershipInfo);
         return res.send({
           transactionId: session.payment_intent,
-          joinedId: joined.insertedId,
+          joinedmemberId: joinedmember.insertedId,
         });
       }
       res.send({
         transactionId: session.payment_intent,
-        joinedId: joined._id,
+        joinedId: joinedmember._id,
       });
     });
+
+    // * get all clubs for a member by email
+    app.get("/my-clubs/:email", async (req, res) => {
+      const email = req.params.email;
+      // managerEmail;
+      // userEmail;
+      const result = await membershipsCollection
+        .find({ userEmail: email })
+        .toArray();
+      res.send(result);
+    });
+    //* get all clubs MEMBER for a manager by email
+    app.get("/manage-member/:email", async (req, res) => {
+      const email = req.params.email;
+      // userEmail;
+      // managerEmail;
+      const result = await membershipsCollection
+        .find({ managerEmail: email })
+        .toArray();
+      res.send(result);
+    });
+    //* get all clubs for a manager by email
+    app.get("/manage-clubs/:email", async (req, res) => {
+      const email = req.params.email;
+      // clubsCollection
+      const result = await clubsCollection
+        .find({ managerEmail: email })
+        .toArray();
+      res.send(result);
+    });
+    // ! get all clubs for a admin / also can use club db
+    app.get("/admin-clubs", async (req, res) => {
+      // const email = req.params.email;
+      const result = await clubsCollection.find().toArray();
+      res.send(result);
+    });
+    // // get all clubs for a admin by email
+    // app.get("/admin-clubs/:email", async (req, res) => {
+    //   const email = req.params.email;
+
+    //   const result = await clubsCollection.find({ userEmail: email }).toArray();
+    //   res.send(result);
+    // });
     //!=============END===========!//
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
