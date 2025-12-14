@@ -12,7 +12,11 @@ const MembersMenu = () => {
 
   return (
     <>
-      <MenuItem icon={BsFingerprint} label="My Clubs" address="my-clubs" />
+      <MenuItem
+        icon={BsFingerprint}
+        label="**members** My Clubs"
+        address="my-clubs"
+      />
 
       <div
         onClick={() => setIsOpen(true)}
@@ -20,7 +24,7 @@ const MembersMenu = () => {
       >
         <GrUserAdmin className="w-5 h-5" />
 
-        <span className="mx-4 font-medium">Become A Seller</span>
+        <span className="mx-4 font-medium"> **members** Become A Seller</span>
       </div>
       <BecomeSellerModal closeModal={closeModal} isOpen={isOpen} />
     </>

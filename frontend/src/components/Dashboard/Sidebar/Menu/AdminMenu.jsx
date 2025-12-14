@@ -7,12 +7,12 @@ const AdminMenu = () => {
     <>
       <MenuItem
         icon={FaUserCog}
-        label="**admin** Manage Users"
+        label="**admin**  Users" //Manage Users
         address="admin-users"
       />
       <MenuItem
         icon={MdOutlineManageHistory}
-        label="**admin** Manage clubs"
+        label="**admin**  clubs" // Manage clubs
         address="admin-clubs"
       />
     </>

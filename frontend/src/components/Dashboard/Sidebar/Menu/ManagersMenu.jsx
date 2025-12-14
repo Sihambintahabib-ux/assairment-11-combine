@@ -1,7 +1,7 @@
 import { BsFillHouseAddFill } from "react-icons/bs";
 import { MdHomeWork } from "react-icons/md";
 import MenuItem from "./MenuItem";
-const ManagersMenu = () => {
+const SellerMenu = () => {
   return (
     <>
       <MenuItem
@@ -11,16 +11,16 @@ const ManagersMenu = () => {
       />
       <MenuItem
         icon={MdHomeWork}
-        label="**manager** Club Members"
+        label="**manager** Members" //Club Members
         address="clubmembers"
       />
       <MenuItem
         icon={MdHomeWork}
-        label="**manager** Manager Clubs"
+        label="**manager** Clubs" //Manager Clubs
         address="managerClubs"
       />
     </>
   );
 };
 
-export default ManagersMenu;
+export default SellerMenu;
