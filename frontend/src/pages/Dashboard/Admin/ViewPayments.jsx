@@ -1,27 +1,28 @@
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import CustomerOrderDataRow from "../../../components/Dashboard/TableRows/CustomerOrderDataRow";
 import axios from "axios";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import ErrorPage from "../../ErrorPage";
 import useAuth from "../../../hooks/useAuth";
+import MembersPaymentHistoryRow from "../../../components/Dashboard/TableRows/MembersPaymentHistoryRow";
 
-const MyClubs = () => {
+const ViewPayments = () => {
   const { user } = useAuth();
   const {
     isLoading,
     isError,
-    data: myClubs = [],
+    data: allpayhistory = [],
     // refetch,
   } = useQuery({
-    queryKey: ["myClubs", user?.email],
+    queryKey: ["allpayhistory", user?.email],
     queryFn: async () => {
       const result = await axios(
-        `${import.meta.env.VITE_API_URL}/my-clubs/${user?.email}`
+        `${import.meta.env.VITE_API_URL}/payment-history`
       );
       return result.data;
     },
   });
-  console.log(myClubs);
+  console.log(allpayhistory);
   if (isLoading) return <LoadingSpinner></LoadingSpinner>;
   if (isError) return <ErrorPage></ErrorPage>;
   return (
@@ -29,7 +30,8 @@ const MyClubs = () => {
       <div className="container mx-auto px-4 sm:px-8">
         <title>my-clubs</title>
         <div className="py-8">
-          <p> Member : My Clubs (club of member joined)</p>
+          <p> Member : PaymentHistory</p>
+
           <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
             <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
               <table className="min-w-full leading-normal">
@@ -39,20 +41,26 @@ const MyClubs = () => {
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
-                      Image
+                      club Name
                     </th>
                     <th
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
-                      Name
+                      user Email
                     </th>
 
                     <th
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
-                      location
+                      amount
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                    >
+                      type
                     </th>
                     {/* <th
                       scope="col"
@@ -64,26 +72,26 @@ const MyClubs = () => {
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
-                      expiry date
+                      date
                     </th>
 
-                    <th
+                    {/* <th
                       scope="col"
-                      className="px-5 py-3  bg-red-500 hover:bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                      className="px-5 py-3  bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
-                      membership status
-                    </th>
+                      payment status
+                    </th> */}
                     <th
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
-                      Details
+                      status
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {myClubs.map((data) => (
-                    <CustomerOrderDataRow key={data._id} data={data} />
+                  {allpayhistory.map((data) => (
+                    <MembersPaymentHistoryRow key={data._id} data={data} />
                   ))}
                 </tbody>
               </table>
@@ -95,4 +103,4 @@ const MyClubs = () => {
   );
 };
 
-export default MyClubs;
+export default ViewPayments;

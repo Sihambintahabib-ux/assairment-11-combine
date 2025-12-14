@@ -69,6 +69,7 @@ async function run() {
     const db = client.db("clubsdb");
     const clubsCollection = db.collection("clubs"); // plantsCollection
     const membershipsCollection = db.collection("memberships"); // ordersCollection
+    const paymentsCollection = db.collection("payments");
 
     //!=============START===========!//
 
@@ -83,6 +84,20 @@ async function run() {
     app.get("/clubs", async (req, res) => {
       const result = await clubsCollection.find().toArray();
       console.log(result);
+      res.send(result);
+    });
+    // *get all paymenthistory from db - adbim
+    app.get("/payment-history", async (req, res) => {
+      const email = req.params.email;
+      const result = await paymentsCollection.find().toArray();
+      res.send(result);
+    });
+    // *get all paymenthistory from db - memberse
+    app.get("/my-payment/:email", async (req, res) => {
+      const email = req.params.email;
+      const result = await paymentsCollection
+        .find({ userEmail: email })
+        .toArray();
       res.send(result);
     });
 
@@ -136,7 +151,7 @@ async function run() {
       res.send({ url: session.url });
     });
 
-    //*post membershipsCollection (payment-success)
+    //*post membershipsCollection (payment-success) + save to paymentcollection db
     app.post("/payment-success", async (req, res) => {
       const { sessionId } = req.body;
       // const sessionIsssd = req.body;
@@ -180,6 +195,20 @@ async function run() {
         };
         console.log(membershipInfo);
         const result = await membershipsCollection.insertOne(membershipInfo);
+        // * SAVE TO PAYMENTS COLLECTION:
+        const paymentRecord = {
+          userEmail: session.metadata.member_email,
+          amount: session.amount_total / 100,
+          type: "membership",
+          clubId: session.metadata.clubId,
+          clubName: club.clubName,
+          stripePaymentIntentId: session.payment_intent,
+          status: "completed",
+          createdAt: new Date().toLocaleDateString("en-IN"),
+        };
+
+        await paymentsCollection.insertOne(paymentRecord);
+
         return res.send({
           transactionId: session.payment_intent,
           joinedmemberId: joinedmember.insertedId,

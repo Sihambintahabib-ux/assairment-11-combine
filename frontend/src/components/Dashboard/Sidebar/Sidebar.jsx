@@ -75,8 +75,8 @@ const Sidebar = () => {
               />
               {/* Role-Based Menu */}
               <MembersMenu />
-              <AdminMenu />
               <ManagersMenu />
+              <AdminMenu />
             </nav>
           </div>
 

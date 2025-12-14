@@ -14,6 +14,7 @@ const CustomerOrderDataRow = ({ data }) => {
     bannerImage,
     category,
     location,
+    expiresAt,
   } = data;
   return (
     <tr>
@@ -53,7 +54,7 @@ const CustomerOrderDataRow = ({ data }) => {
               : "bg-gray-300"
           } opacity-100 rounded-full`}
         >
-          {status}
+          {expiresAt}
         </p>
       </td>
 

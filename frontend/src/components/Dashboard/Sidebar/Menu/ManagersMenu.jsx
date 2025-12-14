@@ -1,26 +1,39 @@
 import { BsFillHouseAddFill } from "react-icons/bs";
 import { MdHomeWork } from "react-icons/md";
 import MenuItem from "./MenuItem";
-const SellerMenu = () => {
+const ManagersMenu = () => {
   return (
     <>
-      <MenuItem
-        icon={BsFillHouseAddFill}
-        label="**manager** Add club"
-        address="add-club"
-      />
-      <MenuItem
-        icon={MdHomeWork}
-        label="**manager** Members" //Club Members
-        address="clubmembers"
-      />
-      <MenuItem
-        icon={MdHomeWork}
-        label="**manager** Clubs" //Manager Clubs
-        address="managerClubs"
-      />
+      <div className="bg-blue-400">
+        <MenuItem
+          icon={BsFillHouseAddFill}
+          label="Add club"
+          address="add-club"
+        />
+        <MenuItem
+          icon={MdHomeWork}
+          label="Club Members"
+          address="clubmembers"
+        />
+        <MenuItem
+          icon={MdHomeWork}
+          label="Manager Clubs"
+          address="managerClubs"
+        />
+        <MenuItem icon={MdHomeWork} label="Add Events" address="add-events" />
+        <MenuItem
+          icon={MdHomeWork}
+          label="Events Management"
+          address="events-management"
+        />
+        <MenuItem
+          icon={MdHomeWork}
+          label="Event Registrations"
+          address="event-registrations"
+        />
+      </div>
     </>
   );
 };
 
-export default SellerMenu;
+export default ManagersMenu;

@@ -5,16 +5,19 @@ import { MdOutlineManageHistory } from "react-icons/md";
 const AdminMenu = () => {
   return (
     <>
-      <MenuItem
-        icon={FaUserCog}
-        label="**admin**  Users" //Manage Users
-        address="admin-users"
-      />
-      <MenuItem
-        icon={MdOutlineManageHistory}
-        label="**admin**  clubs" // Manage clubs
-        address="admin-clubs"
-      />
+      <div className="bg-red-400">
+        <MenuItem icon={FaUserCog} label="Manage Users" address="admin-users" />
+        <MenuItem
+          icon={MdOutlineManageHistory}
+          label="Manage clubs"
+          address="admin-clubs"
+        />
+        <MenuItem
+          icon={MdOutlineManageHistory}
+          label="View Payments"
+          address="View-Payments"
+        />
+      </div>
     </>
   );
 };

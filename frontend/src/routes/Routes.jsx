@@ -21,6 +21,12 @@ import Addclubs from "../pages/Dashboard/Manager/Addclubs";
 import AdminUsers from "../pages/Dashboard/Admin/AdminUsers";
 import AdminClubs from "../pages/Dashboard/Admin/AdminClubs";
 import ManagerClubs from "../pages/Dashboard/Manager/managerclubs";
+import MyEvents from "../pages/Dashboard/Customer/MyEvents";
+import PaymentHistory from "../pages/Dashboard/Customer/PaymentHistory";
+import ViewPayments from "../pages/Dashboard/Admin/ViewPayments";
+import EventRegistrations from "../pages/Dashboard/Manager/EventRegistrations";
+import EventsManagement from "../pages/Dashboard/Manager/EventsManagement";
+import AddEvents from "../pages/Dashboard/Manager/AddEvents";
 
 export const router = createBrowserRouter([
   {
@@ -107,7 +113,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "my-clubs", // my-clubs // my-orders
+        path: "my-clubs", // manager
         element: (
           <PrivateRoute>
             {/* <MyOrders /> */}
@@ -116,8 +122,55 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin-clubs",
+        path: "add-events",
+        element: (
+          <PrivateRoute>
+            {/* <MyOrders /> */}
+            <AddEvents></AddEvents>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "my-events",
+        element: (
+          <PrivateRoute>
+            {/* <MyOrders /> */}
+            <MyEvents></MyEvents>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "event-registrations",
+        element: (
+          <PrivateRoute>
+            <EventRegistrations></EventRegistrations>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "events-management",
+        element: (
+          <PrivateRoute>
+            <EventsManagement></EventsManagement>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "paymenthistory",
+        element: (
+          <PrivateRoute>
+            {/* <MyOrders /> */}
+            <PaymentHistory></PaymentHistory>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "admin-clubs", // admin
         element: <AdminClubs></AdminClubs>,
+      },
+      {
+        path: "View-Payments",
+        element: <ViewPayments></ViewPayments>,
       },
     ],
   },
