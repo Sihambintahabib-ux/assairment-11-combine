@@ -13,16 +13,20 @@ import MenuItem from "./Menu/MenuItem";
 import AdminMenu from "./Menu/AdminMenu";
 import ManagersMenu from "./Menu/ManagersMenu";
 import MembersMenu from "./Menu/MembersMenu";
+import useRole from "../../../hooks/useRole";
+import LoadingSpinner from "../../Shared/LoadingSpinner";
 
 const Sidebar = () => {
   const { logOut } = useAuth();
+  const [role, isRoleLoading] = useRole();
+
   const [isActive, setActive] = useState(false);
 
   // Sidebar Responsive Handler
   const handleToggle = () => {
     setActive(!isActive);
   };
-
+  if (isRoleLoading) return <LoadingSpinner></LoadingSpinner>;
   return (
     <>
       {/* Small Screen Navbar, only visible till md breakpoint */}
@@ -73,7 +77,12 @@ const Sidebar = () => {
                 label="Statistics"
                 address="/dashboard"
               />
+
               {/* Role-Based Menu */}
+              {/* {role === "member" && <MembersMenu />}
+              {role === "menager" && <ManagersMenu />}
+              {role === "admin" && <AdminMenu />} */}
+
               <MembersMenu />
               <ManagersMenu />
               <AdminMenu />

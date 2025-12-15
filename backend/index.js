@@ -87,22 +87,26 @@ async function run() {
         // return res.json({ success: true, user: existingUser });
         const result = await userCollection.updateOne(query, {
           $set: {
-            lastloggedAt: new Date().toISOString(),
+            lastloggedAt: new Date(),
           },
-          // $set: {
-          //   lastloggedAt: new Date().toLocaleDateString("en-IN"),
-          // },
         });
         return res.send(result);
       }
-      console.log(result);
+      // console.log(result);
       // * newUser
       const result = await userCollection.insertOne(userData);
       console.log("userCollection============?", result);
 
       res.send(result);
     });
+    //* get user role from userCollection
+    app.get("/user/role/:email", verifyJWT, async (req, res) => {
+      const email = req.params.email;
+      // const email = email: req.tokenEmail ;
 
+      const result = await userCollection.findOne({ email });
+      res.send({ role: result?.role });
+    });
     //*save add-club to db
     app.post("/clubs", async (req, res) => {
       const clubData = req.body; //plantsdata =1.5
@@ -194,11 +198,57 @@ async function run() {
 
       // console.log(session);
       // console.log("club------->>>>>", club);
-
-      // check dublicate data
+      //!
+      // const clubId = session.metadata.clubId;
+      // const userEmail = session.metadata.member_email;
+      //!
+      // * existingmember : check dublicate data
       const joinedmember = await membershipsCollection.findOne({
-        transactionId: session.payment_intent,
+        // transactionId: session.payment_intent,
+        // userEmail: session.metadata.member_email,
+        // clubId: session.metadata.clubId,
+        userEmail: session.metadata.member_email, //!
+        clubId: session.metadata.clubId, //!
       });
+
+      //!
+      console.log("session.payment_intent", session.payment_intent);
+      console.log(joinedmember);
+      console.log("session.payment_intent", session.payment_intent);
+      const query = { email: session.metadata.member_email };
+      if (joinedmember) {
+        const result = await membershipsCollection.updateOne(query, {
+          $set: {
+            joinedAt: new Date(),
+            expiresAt: new Date(),
+          },
+        });
+
+        return res.send(result);
+      }
+
+      //!
+      //!
+      // if (joinedmember) {
+      //   return res.status(400).json({
+      //     success: false,
+      //     message: "You are already a member of this club!",
+      //   });
+      // }
+      //!
+
+      //!
+      // const duplicateTransaction = await membershipsCollection.findOne({
+      //   transactionId: session.payment_intent,
+      // });
+
+      // if (duplicateTransaction) {
+      //   return res.send({
+      //     transactionId: session.payment_intent,
+      //     joinedId: duplicateTransaction._id,
+      //   });
+      // }
+      //!
 
       if (session.status === "complete" && club && !joinedmember) {
         // save data to db
@@ -214,8 +264,8 @@ async function run() {
           paymentId: session.id,
           membershipFee: session.amount_total / 100,
           // status: session,
-          joinedAt: new Date().toLocaleDateString("en-IN"), //
-          expiresAt: new Date().toLocaleDateString("en-IN"), //
+          joinedAt: new Date(), // .toLocaleDateString("en-IN")
+          expiresAt: new Date(), // .toLocaleDateString("en-IN")
           bannerImage: club.bannerImage,
           description: club.description,
           location: club.location,
@@ -223,8 +273,10 @@ async function run() {
 
           // membershipFeeFees00: club.unit_amount,
         };
-        // console.log(membershipInfo);
+        console.log("membershipInfo===========>", membershipInfo);
+
         const result = await membershipsCollection.insertOne(membershipInfo);
+        //*
         // * SAVE TO PAYMENTS COLLECTION:
         const paymentRecord = {
           userEmail: session.metadata.member_email,
@@ -239,10 +291,10 @@ async function run() {
         };
 
         await paymentsCollection.insertOne(paymentRecord);
-
+        //*
         return res.send({
           transactionId: session.payment_intent,
-          joinedmemberId: joinedmember.insertedId,
+          joinedmemberId: result.insertedId,
         });
       }
       res.send({
@@ -295,7 +347,7 @@ async function run() {
     // });
     //!=============END===========!//
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );

@@ -51,16 +51,17 @@ const SignUp = () => {
       const imgURL = await imageUpload(imgfile);
       //* imgfile set END
 
-      //* save user data to db :
+      //* save user data to db (password) :
       await saveOrUpdateUser({
         name,
         email,
         image: imgURL,
-        createdAt: new Date().toLocaleDateString("en-IN"),
-        lastloggedAt: new Date().toLocaleDateString("en-IN"),
-        role: "customer",
+        createdAt: new Date(),
+        lastloggedAt: new Date(),
+        role: "member",
       });
       console.log(saveOrUpdateUser);
+      //*
 
       //2. User Registration
       const result = await createUser(email, password);
@@ -116,14 +117,14 @@ const SignUp = () => {
 
       // const [user] = result;
       // console.log(user);
-      //* save user data to db :
+      //* save user data to db (google) :
       await saveOrUpdateUser({
         name: user?.displayName,
         email: user?.email,
         image: user?.photoURL,
-        createdAt: new Date().toLocaleDateString("en-IN"),
-        lastloggedAt: new Date().toLocaleDateString("en-IN"),
-        role: "customer",
+        createdAt: new Date(),
+        lastloggedAt: new Date(),
+        role: "member",
       });
       //*
       navigate(from, { replace: true });

@@ -3,19 +3,27 @@ import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router";
 import axios from "axios";
 import { CgProfile } from "react-icons/cg";
+import { useRef } from "react";
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
-
+  const dublicajoin = useRef(false);
   const sessionId = searchParams.get("session_id");
   console.log(sessionId);
   useEffect(() => {
-    if (sessionId) {
+    console.log(dublicajoin.current);
+
+    if (!sessionId || dublicajoin.current === true) {
       // fetch
-      axios.post(`${import.meta.env.VITE_API_URL}/payment-success`, {
-        sessionId,
-      });
+      return;
     }
+    dublicajoin.current = true;
+    axios.post(`${import.meta.env.VITE_API_URL}/payment-success`, {
+      sessionId,
+      //        userEmail: user.email,
+      // clubId: clubId,
+    });
   }, [sessionId]);
+
   return (
     <div className="flex flex-col items-center justify-center">
       <div className="bg-white p-10 rounded-lg shadow-lg text-center">
