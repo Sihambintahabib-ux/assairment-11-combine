@@ -37,6 +37,12 @@ const PaymentHistory = () => {
               <table className="min-w-full leading-normal">
                 <thead>
                   <tr>
+                    {/* <th
+                      scope="col"
+                      className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                    >
+                      user img
+                    </th> */}
                     <th
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
@@ -91,7 +97,11 @@ const PaymentHistory = () => {
                 </thead>
                 <tbody>
                   {payhistory.map((data) => (
-                    <MembersPaymentHistoryRow key={data._id} data={data} />
+                    <MembersPaymentHistoryRow
+                      key={data._id}
+                      data={data}
+                      user={user}
+                    />
                   ))}
                 </tbody>
               </table>

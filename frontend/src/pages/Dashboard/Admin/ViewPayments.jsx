@@ -91,7 +91,11 @@ const ViewPayments = () => {
                 </thead>
                 <tbody>
                   {allpayhistory.map((data) => (
-                    <MembersPaymentHistoryRow key={data._id} data={data} />
+                    <MembersPaymentHistoryRow
+                      key={data._id}
+                      data={data}
+                      user={user}
+                    />
                   ))}
                 </tbody>
               </table>

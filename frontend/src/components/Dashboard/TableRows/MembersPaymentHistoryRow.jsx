@@ -4,7 +4,7 @@ import React from "react";
 // import UpdatePlantModal from "../../Modal/UpdatePlantModal";
 // import { useState } from "react";
 
-const MembersPaymentHistoryRow = ({ data }) => {
+const MembersPaymentHistoryRow = ({ data, user }) => {
   // let [isOpen, setIsOpen] = useState(false);
   // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
@@ -24,10 +24,24 @@ const MembersPaymentHistoryRow = ({ data }) => {
     type,
     createdAt,
   } = data;
+  console.log(user);
   return (
     <tr>
       <title>manager club member joiner member list</title>
 
+      {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <div className="flex items-center">
+          <div className="shrink-0">
+            <div className="block relative">
+              <img
+                alt="profile"
+                src={user?.photoURL}
+                className="mx-auto object-cover rounded h-10 w-15 "
+              />
+            </div>
+          </div>
+        </div>
+      </td> */}
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 ">{clubName}</p>
       </td>

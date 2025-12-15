@@ -39,15 +39,15 @@ app.use(express.json());
 // jwt middlewares
 const verifyJWT = async (req, res, next) => {
   const token = req?.headers?.authorization?.split(" ")[1];
-  console.log(token);
+  // console.log(token);
   if (!token) return res.status(401).send({ message: "Unauthorized Access!" });
   try {
     const decoded = await admin.auth().verifyIdToken(token);
     req.tokenEmail = decoded.email;
-    console.log(decoded);
+    // console.log(decoded);
     next();
   } catch (err) {
-    console.log(err);
+    // console.log(err);
     return res.status(401).send({ message: "Unauthorized Access!", err });
   }
 };
@@ -70,20 +70,29 @@ async function run() {
     const clubsCollection = db.collection("clubs"); // plantsCollection
     const membershipsCollection = db.collection("memberships"); // ordersCollection
     const paymentsCollection = db.collection("payments");
+    const userCollection = db.collection("users");
 
     //!=============START===========!//
+    //* sava data of users login or signup to db in userCollection
+
+    app.post("/user", async (req, res) => {
+      const userData = req.body;
+      const result = await userCollection.insertOne(userData);
+      console.log("userCollection============?", result);
+      res.send(result);
+    });
 
     //*save add-club to db
     app.post("/clubs", async (req, res) => {
       const clubData = req.body; //plantsdata =1.5
-      console.log(clubData);
+      // console.log(clubData);
       const result = await clubsCollection.insertOne(clubData);
       res.send(result);
     });
     // *get all club from db
     app.get("/clubs", async (req, res) => {
       const result = await clubsCollection.find().toArray();
-      console.log(result);
+      // console.log(result);
       res.send(result);
     });
     // *get all paymenthistory from db - adbim
@@ -163,7 +172,7 @@ async function run() {
       });
 
       // console.log(session);
-      console.log("club------->>>>>", club);
+      // console.log("club------->>>>>", club);
 
       // check dublicate data
       const joinedmember = await membershipsCollection.findOne({
@@ -193,7 +202,7 @@ async function run() {
 
           // membershipFeeFees00: club.unit_amount,
         };
-        console.log(membershipInfo);
+        // console.log(membershipInfo);
         const result = await membershipsCollection.insertOne(membershipInfo);
         // * SAVE TO PAYMENTS COLLECTION:
         const paymentRecord = {
@@ -202,6 +211,7 @@ async function run() {
           type: "membership",
           clubId: session.metadata.clubId,
           clubName: club.clubName,
+
           stripePaymentIntentId: session.payment_intent,
           status: "completed",
           createdAt: new Date().toLocaleDateString("en-IN"),

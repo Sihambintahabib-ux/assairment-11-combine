@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { imageUpload } from "../../utils";
+import { imageUpload, saveOrUpdateUser } from "../../utils";
 
 const SignUp = () => {
   const { createUser, updateUserProfile, signInWithGoogle, loading } =
@@ -15,7 +15,7 @@ const SignUp = () => {
   const from = location.state || "/";
 
   //* React-hook form :
-  //* form submit handler with React-hook form
+  //* 1. form submit handler with React-hook form
   const {
     register,
     handleSubmit,
@@ -27,8 +27,9 @@ const SignUp = () => {
   //* 2. create a onSubmit variable :
   const onSubmit = async (data) => {
     console.log(data);
-    // 1. get user data
+    // * 1. get user data
     const { name, email, image, password } = data;
+    //* imgbb - imgfile set :
     //* 1.imgfile set :
     var imgfile = image[0];
     // console.log(imgfile);
@@ -49,6 +50,17 @@ const SignUp = () => {
       // return;
       const imgURL = await imageUpload(imgfile);
       //* imgfile set END
+
+      //* save user data to db :
+      await saveOrUpdateUser({
+        name,
+        email,
+        image: imgURL,
+        createdAt: new Date().toLocaleDateString("en-IN"),
+        role: "customer",
+      });
+      console.log(saveOrUpdateUser);
+
       //2. User Registration
       const result = await createUser(email, password);
       //3. Save username & profile photo
