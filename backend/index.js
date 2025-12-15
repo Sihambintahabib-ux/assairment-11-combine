@@ -77,8 +77,29 @@ async function run() {
 
     app.post("/user", async (req, res) => {
       const userData = req.body;
+
+      //* existingUser
+      const existingUser = await userCollection.findOne({
+        email: userData.email,
+      });
+      const query = { email: userData.email };
+      if (existingUser) {
+        // return res.json({ success: true, user: existingUser });
+        const result = await userCollection.updateOne(query, {
+          $set: {
+            lastloggedAt: new Date().toISOString(),
+          },
+          // $set: {
+          //   lastloggedAt: new Date().toLocaleDateString("en-IN"),
+          // },
+        });
+        return res.send(result);
+      }
+      console.log(result);
+      // * newUser
       const result = await userCollection.insertOne(userData);
       console.log("userCollection============?", result);
+
       res.send(result);
     });
 
@@ -160,7 +181,7 @@ async function run() {
       res.send({ url: session.url });
     });
 
-    //*post membershipsCollection (payment-success) + save to paymentcollection db
+    //*save membership to membershipsCollection (after payment successfull) + save payment to paymentcollection db
     app.post("/payment-success", async (req, res) => {
       const { sessionId } = req.body;
       // const sessionIsssd = req.body;

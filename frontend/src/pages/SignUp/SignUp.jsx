@@ -4,7 +4,7 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-hot-toast";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+// import axios from "axios";
 import { imageUpload, saveOrUpdateUser } from "../../utils";
 
 const SignUp = () => {
@@ -57,6 +57,7 @@ const SignUp = () => {
         email,
         image: imgURL,
         createdAt: new Date().toLocaleDateString("en-IN"),
+        lastloggedAt: new Date().toLocaleDateString("en-IN"),
         role: "customer",
       });
       console.log(saveOrUpdateUser);
@@ -106,13 +107,25 @@ const SignUp = () => {
   //   }
   // }
 
-  // Handle Google Signin
-
+  //* Handle Google Signin
   const handleGoogleSignIn = async () => {
     try {
-      //User Registration using google
-      await signInWithGoogle();
+      //*User Registration using google
+      // const result = await signInWithGoogle();
+      const { user } = await signInWithGoogle();
 
+      // const [user] = result;
+      // console.log(user);
+      //* save user data to db :
+      await saveOrUpdateUser({
+        name: user?.displayName,
+        email: user?.email,
+        image: user?.photoURL,
+        createdAt: new Date().toLocaleDateString("en-IN"),
+        lastloggedAt: new Date().toLocaleDateString("en-IN"),
+        role: "customer",
+      });
+      //*
       navigate(from, { replace: true });
       toast.success("Signup Successful");
     } catch (err) {
