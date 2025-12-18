@@ -1,12 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
 import CustomerOrderDataRow from "../../../components/Dashboard/TableRows/CustomerOrderDataRow";
-import axios from "axios";
+// import axios from "axios";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import ErrorPage from "../../ErrorPage";
 import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const MyClubs = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
   const {
     isLoading,
     isError,
@@ -15,9 +18,7 @@ const MyClubs = () => {
   } = useQuery({
     queryKey: ["myClubs", user?.email],
     queryFn: async () => {
-      const result = await axios(
-        `${import.meta.env.VITE_API_URL}/my-clubs/${user?.email}`
-      );
+      const result = await axiosSecure(`/my-clubs`);
       return result.data;
     },
   });

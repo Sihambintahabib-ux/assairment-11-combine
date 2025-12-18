@@ -1,6 +1,30 @@
+import { useQuery } from "@tanstack/react-query";
 import UserDataRow from "../../../components/Dashboard/TableRows/UserDataRow";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
+import ErrorPage from "../../ErrorPage";
+import axios from "axios";
 
 const AdminUsers = () => {
+  const { user } = useAuth();
+  const {
+    isLoading,
+    isError,
+    data: adminUsers = [],
+    // refetch,
+  } = useQuery({
+    queryKey: ["adminUsers", user?.email],
+    queryFn: async () => {
+      const result = await axios(`${import.meta.env.VITE_API_URL}/user`);
+      return result.data;
+    },
+  });
+
+  console.log("adminUsers", adminUsers);
+  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
+  if (isError) return <ErrorPage></ErrorPage>;
+
   return (
     <>
       <div className="container mx-auto px-4 sm:px-8">
@@ -14,6 +38,12 @@ const AdminUsers = () => {
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
+                      img
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
+                    >
                       Email
                     </th>
                     <th
@@ -22,12 +52,12 @@ const AdminUsers = () => {
                     >
                       Role
                     </th>
-                    <th
+                    {/* <th
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
                       Status
-                    </th>
+                    </th> */}
 
                     <th
                       scope="col"
@@ -38,7 +68,9 @@ const AdminUsers = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <UserDataRow />
+                  {adminUsers.map((data) => (
+                    <UserDataRow key={data._id} data={data} />
+                  ))}
                 </tbody>
               </table>
             </div>

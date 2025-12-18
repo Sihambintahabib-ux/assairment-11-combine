@@ -1,22 +1,37 @@
+import React from "react";
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
 import UpdatePlantModal from "../../Modal/UpdatePlantModal";
-const ManagerClubDataRow = ({ data }) => {
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  console.log("ManagerClubDataRow- admin club", data);
-  const {
-    clubName,
-    managerEmail,
-    membershipFee,
-    location,
-    status,
-    bannerImage,
-    category,
-  } = data;
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+
+const ManagerEventDataRow = ({ data }) => {
   let [isOpen, setIsOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  console.log(data);
+  const {
+    title,
+    description,
+    eventDate,
+    location,
+    isPaid,
+    eventFee,
+    maxAttendees,
+    _id,
+    // update,
+    // delete,
+    // clubName,
+    // managerEmail,
+    // membershipFee,
+    // location,
+    // status,
+    bannerImage,
+    // category,
+  } = data;
+  //   let [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
 
   return (
+    // <div>
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex items-center">
@@ -32,50 +47,27 @@ const ManagerClubDataRow = ({ data }) => {
         </div>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-red-900 ">{clubName}</p>
+        <p className="text-red-900 ">{title}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">{managerEmail}</p>
+        <p className="text-gray-900 ">{description}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">{membershipFee}</p>
+        <p className="text-gray-900 ">{eventDate}</p>
       </td>
 
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 ">{location}</p>
       </td>
+      {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <p className="text-gray-900 ">{isPaid}</p>
+      </td> */}
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">{category}</p>
+        <p className="text-gray-900 ">{eventFee}</p>
       </td>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <p className="text-gray-900 ">{status}</p>
+        <p className="text-gray-900 ">{maxAttendees}</p>
       </td>
-
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-        <div className="flex items-center gap-2">
-          {/* <select
-            required
-            className="p-1 border-2 border-lime-300 focus:outline-lime-500 rounded-md text-gray-900  bg-white"
-            name="category"
-          >
-            <option value="Pending">Pending</option>
-            <option value="In Progress">Start Processing</option>
-            <option value="Delivered">Deliver</option>
-          </select> */}
-          <button
-            onClick={() => setIsOpen(true)}
-            className="relative disabled:cursor-not-allowed cursor-pointer inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
-          >
-            <span
-              aria-hidden="true"
-              className="absolute inset-0 bg-red-200 opacity-50 rounded-full"
-            ></span>
-            <span className="relative">Cancel</span>
-          </button>
-        </div>
-        <DeleteModal isOpen={isOpen} closeModal={closeModal} />
-      </td>
-
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <span
           onClick={() => setIsEditModalOpen(true)}
@@ -92,8 +84,24 @@ const ManagerClubDataRow = ({ data }) => {
           setIsEditModalOpen={setIsEditModalOpen}
         />
       </td>
+
+      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+        <button
+          onClick={() => setIsOpen(true)}
+          className="relative disabled:cursor-not-allowed cursor-pointer inline-block px-3 py-1 font-semibold text-green-900 leading-tight"
+        >
+          <span
+            aria-hidden="true"
+            className="absolute inset-0 bg-red-200 opacity-50 rounded-full"
+          ></span>
+          <span className="relative">Cancel</span>
+        </button>
+        {/* </div> */}
+        <DeleteModal isOpen={isOpen} closeModal={closeModal} />
+      </td>
     </tr>
+    // </div>
   );
 };
 
-export default ManagerClubDataRow;
+export default ManagerEventDataRow;

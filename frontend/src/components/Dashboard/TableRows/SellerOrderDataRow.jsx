@@ -1,19 +1,53 @@
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
-const SellerOrderDataRow = ({ data }) => {
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
+const SellerOrderDataRow = ({ data, refetch }) => {
   console.log("SellerOrderDataRow- admin club", data);
   const {
+    _id,
     clubName,
     managerEmail,
     membershipFee,
-
+    updatedAt,
+    updateAt,
     status,
     bannerImage,
     category,
   } = data;
   let [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
-
+  //* function handleApproved
+  const axiosSecure = useAxiosSecure();
+  const handleApproved = async () => {
+    try {
+      await axiosSecure.patch(`/updateClubStatusApproved/${_id}`, {
+        email: data.managerEmail,
+        status: "approved",
+        updateAt,
+      });
+      toast.success("club approved");
+      console.log(handleApproved);
+      refetch();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
+  //* function handleReject
+  const handleReject = async () => {
+    try {
+      await axiosSecure.patch(`/updateClubStatusReject/${_id}`, {
+        email: data.managerEmail,
+        status: "reject",
+        updateAt,
+      });
+      toast.success("club reject");
+      console.log(handleReject);
+      refetch();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <tr>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -42,14 +76,21 @@ const SellerOrderDataRow = ({ data }) => {
       {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 ">Dhaka</p>
       </td> */}
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 ">{category}</p>
-      </td>
+      </td> */}
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <p className="text-gray-900 ">{status}</p>
       </td>
-
-      <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <td className="flex items-center gap-2  px-6 py-7">
+        <button onClick={handleApproved} className="text-blue-600">
+          approved
+        </button>
+        <button onClick={handleReject} className="text-red-600">
+          reject
+        </button>
+      </td>
+      {/* <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex items-center gap-2">
           <select
             required
@@ -72,7 +113,7 @@ const SellerOrderDataRow = ({ data }) => {
           </button>
         </div>
         <DeleteModal isOpen={isOpen} closeModal={closeModal} />
-      </td>
+      </td> */}
     </tr>
   );
 };

@@ -1,21 +1,41 @@
 import { useQuery } from "@tanstack/react-query";
 import SellerOrderDataRow from "../../../components/Dashboard/TableRows/SellerOrderDataRow";
 import useAuth from "../../../hooks/useAuth";
-import axios from "axios";
+// import axios from "axios";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import ErrorPage from "../../ErrorPage";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AdminClubs = () => {
+  // const { user } = useAuth();
+  // const {
+  //   isLoading,
+  //   isError,
+  //   data: adminClubs = [],
+  //   // refetch,
+  // } = useQuery({
+  //   queryKey: ["adminClubs", user?.email],
+  //   queryFn: async () => {
+  //     const result = await axios(`${import.meta.env.VITE_API_URL}/admin-clubs`);
+  //     return result.data;
+  //   },
+  // });
+
+  // console.log("adminClubs", adminClubs);
+  // if (isLoading) return <LoadingSpinner></LoadingSpinner>;
+  // if (isError) return <ErrorPage></ErrorPage>;
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
   const {
     isLoading,
     isError,
     data: adminClubs = [],
-    // refetch,
+    refetch,
   } = useQuery({
     queryKey: ["adminClubs", user?.email],
     queryFn: async () => {
-      const result = await axios(`${import.meta.env.VITE_API_URL}/admin-clubs`);
+      const result = await axiosSecure(`/admin-clubs`);
       return result.data;
     },
   });
@@ -65,12 +85,12 @@ const AdminClubs = () => {
                     >
                       Address
                     </th> */}
-                    <th
+                    {/* <th
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
                     >
                       category
-                    </th>
+                    </th> */}
                     {/* <th
                       scope="col"
                       className="px-5 py-3 bg-white  border-b border-gray-200 text-gray-800  text-left text-sm uppercase font-normal"
@@ -94,7 +114,11 @@ const AdminClubs = () => {
                 </thead>
                 <tbody>
                   {adminClubs.map((data) => (
-                    <SellerOrderDataRow key={data._id} data={data} />
+                    <SellerOrderDataRow
+                      refetch={refetch}
+                      key={data._id}
+                      data={data}
+                    />
                   ))}
                 </tbody>
               </table>

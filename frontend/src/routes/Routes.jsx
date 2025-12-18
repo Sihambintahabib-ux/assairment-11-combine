@@ -27,6 +27,8 @@ import ViewPayments from "../pages/Dashboard/Admin/ViewPayments";
 import EventRegistrations from "../pages/Dashboard/Manager/EventRegistrations";
 import EventsManagement from "../pages/Dashboard/Manager/EventsManagement";
 import AddEvents from "../pages/Dashboard/Manager/AddEvents";
+import Events from "../components/Home/Events";
+import EventsDetails from "../pages/EventsDetails/EventsDetails";
 
 export const router = createBrowserRouter([
   {
@@ -42,11 +44,20 @@ export const router = createBrowserRouter([
         path: "/clubs",
         element: <Clubs />,
       },
-
       {
         path: "/clubs/:id",
         element: <ClubsDetails />,
       },
+      {
+        path: "/events",
+        element: <Events />,
+      },
+
+      {
+        path: "/events/:id",
+        element: <EventsDetails />,
+      },
+
       {
         path: "/payment-success",
         element: <PaymentSuccess />,

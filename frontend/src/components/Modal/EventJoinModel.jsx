@@ -2,47 +2,62 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import useAuth from "../../hooks/useAuth";
 import axios from "axios";
 
-const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
+const EventJoinModel = ({ closeModal, isOpen, events, id }) => {
   // Total Price Calculation
-  console.log(clubs);
+  console.log(events);
   console.log(id);
   const { user } = useAuth();
   console.log(user);
+
   const {
     _id,
-    bannerImage,
-    category,
+    title,
+    description,
+    clubId,
+    eventDate,
+    location,
+    isPaid,
+    eventFee,
+    maxAttendees,
+    createAt,
+    updateAt,
+    // update,
+    // delete,
     clubName,
-    // description,
+    managerEmail,
+    // membershipFee,
     // location,
-    // managerEmail,
-    membershipFee,
-    status,
-    // updateAt,
-  } = clubs || {};
+    // status,
+    bannerImage,
+    // category,
+  } = events;
   const email = user.email;
   const handlePayment = async () => {
     const PaymentInfo = {
       // clubId: new ObjectId(_id),
-      clubId: _id,
+      EventId: _id,
+      clubId: clubId,
+      managerEmail,
+      clubName: clubName,
       userEmail: email,
-      clubName,
-      membershipFee,
-      status,
+      title,
+      location,
+      eventFee,
+      status: "registered",
+      paymentId: "",
       bannerImage,
-      joinedAt: new Date(),
-      // expiresAt: new Date(),
-      expiresAt: null,
+      registatedAt: new Date(),
+      expiresAt: new Date(),
     };
     const result = await axios.post(
-      `${import.meta.env.VITE_API_URL}/create-checkout-session`,
+      `${import.meta.env.VITE_API_URL}/eventsRegistration`,
       PaymentInfo
     );
     console.log(result);
-    console.log(result.data);
-    console.log(result.data.url);
+    // console.log(result.data);
+    // console.log(result.data.url);
     // add - payment address :
-    window.location.href = result.data.url;
+    // window.location.href = result.data.url;
   };
   return (
     <Dialog
@@ -61,13 +76,13 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
               as="h3"
               className="text-lg font-medium text-center leading-6 text-gray-900"
             >
-              Review Info Before Join the club
+              Review Info Before registered the Events
             </DialogTitle>
             <div className="mt-2">
-              <p className="text-sm text-gray-500">Plant: {clubName}</p>
+              <p className="text-sm text-gray-500">Plant: {title}</p>
             </div>
             <div className="mt-2">
-              <p className="text-sm text-gray-500">Category: {category}</p>
+              <p className="text-sm text-gray-500">location: {location}</p>
             </div>
             <div className="mt-2">
               <p className="text-sm text-gray-500">
@@ -76,10 +91,10 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
             </div>
 
             <div className="mt-2">
-              <p className="text-sm text-gray-500">Price: ${membershipFee} </p>
+              <p className="text-sm text-gray-500">Price: ${eventFee} </p>
             </div>
             <div className="mt-2">
-              {/* <p className="text-sm text-gray-500">Available Quantity: 5</p> */}
+              <p className="text-sm text-gray-500">date: {eventDate}</p>
             </div>
             <div className="flex mt-2 justify-around">
               <button
@@ -87,7 +102,7 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
                 type="button"
                 className="cursor-pointer inline-flex justify-center rounded-md border border-transparent bg-green-100 px-4 py-2 text-sm font-medium text-green-900 hover:bg-green-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-green-500 focus-visible:ring-offset-2"
               >
-                Join
+                register
               </button>
               <button
                 type="button"
@@ -104,4 +119,4 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
   );
 };
 
-export default PurchaseModal;
+export default EventJoinModel;

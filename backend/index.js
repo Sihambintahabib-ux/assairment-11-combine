@@ -68,13 +68,14 @@ async function run() {
     //db collection: clubsCollection
     const db = client.db("clubsdb");
     const clubsCollection = db.collection("clubs"); // plantsCollection
+    const eventsCollection = db.collection("events"); // plantsCollection
+    const eventsRegistrationCollection = db.collection("eventsRegistration"); // plantsCollection
     const membershipsCollection = db.collection("memberships"); // ordersCollection
     const paymentsCollection = db.collection("payments");
     const userCollection = db.collection("users");
 
     //!=============START===========!//
     //* sava data of users login or signup to db in userCollection
-
     app.post("/user", async (req, res) => {
       const userData = req.body;
 
@@ -100,13 +101,109 @@ async function run() {
       res.send(result);
     });
     //* get user role from userCollection
-    app.get("/user/role/:email", verifyJWT, async (req, res) => {
-      const email = req.params.email;
+    app.get("/user/role", verifyJWT, async (req, res) => {
+      // const email = req.params.email;
       // const email = email: req.tokenEmail ;
 
-      const result = await userCollection.findOne({ email });
+      const result = await userCollection.findOne({ email: req.tokenEmail });
       res.send({ role: result?.role });
     });
+    //* get all user  from userCollection
+    app.get("/user", async (req, res) => {
+      // const email = req.params.email;
+      // const email = email: req.tokenEmail ;
+
+      const result = await userCollection.find().toArray();
+      res.send(result);
+    });
+
+    //!=============save add-events to db===========!//
+
+    //* save add-events to db
+    app.post("/events", async (req, res) => {
+      const eventData = req.body; //plantsdata =1.5
+      // console.log(clubData);
+      const result = await eventsCollection.insertOne(eventData);
+      res.send(result);
+    });
+    // *get all events from db
+    app.get("/events", async (req, res) => {
+      const result = await eventsCollection.find().toArray();
+      // console.log(result);
+      res.send(result);
+    });
+    // *get one events from db - eventdetails page
+    app.get("/events/:id", async (req, res) => {
+      const id = req.params.id;
+      const result = await eventsCollection.findOne({ _id: new ObjectId(id) });
+      // console.log("get - /clubs/:id", result);
+      res.send(result);
+    });
+    //* create eventsRegistration and add members who registered for events
+    app.post("/eventsRegistration", async (req, res) => {
+      const eventData = req.body; //plantsdata =1.5
+      // console.log(clubData);
+      const result = await eventsRegistrationCollection.insertOne(eventData);
+      res.send(result);
+    });
+
+    // !get all events from db admin
+    app.get("/eventsRegistration", async (req, res) => {
+      const result = await eventsRegistrationCollection.find().toArray();
+      // console.log(result);
+      res.send(result);
+    });
+    // ! get all events for a member by email
+    app.get("/my-events", verifyJWT, async (req, res) => {
+      // const email = req.params.email;
+      // managerEmail;
+      // userEmail;
+      const result = await eventsRegistrationCollection
+        .find({ userEmail: req.tokenEmail })
+        .toArray();
+      res.send(result);
+    });
+    //* get all events MEMBER for a manager by email
+    app.get("/manage-eventsMember/:email", async (req, res) => {
+      const email = req.params.email;
+      // userEmail;
+      // managerEmail;
+      const result = await eventsRegistrationCollection
+        .find({ managerEmail: email })
+        .toArray();
+      res.send(result);
+    });
+    //* get all events for a manager by email
+    app.get("/manage-events/:email", async (req, res) => {
+      const email = req.params.email;
+      // clubsCollection
+      const result = await eventsCollection
+        .find({ managerEmail: email })
+        .toArray();
+      res.send(result);
+    });
+    // !NO :  get all events for a admin / also can use club db
+    // app.get("/admin-events", async (req, res) => {
+    //   // const email = req.params.email;
+    //   const result = await eventsCollection.find().toArray();
+    //   res.send(result);
+    // });
+
+    //!=============end===========!//
+
+    //!============= search filter sort ===========!//
+    //!============= search  ===========!//
+    //* club search :
+    //*event search :
+    //!============= filter ===========!//
+    //* club filter :
+    //*event filter :
+    //!============= sort ===========!//
+    //* club sort :
+    //*event sort :
+
+    //!=============end===========!//
+
     //*save add-club to db
     app.post("/clubs", async (req, res) => {
       const clubData = req.body; //plantsdata =1.5
@@ -220,7 +317,8 @@ async function run() {
         const result = await membershipsCollection.updateOne(query, {
           $set: {
             joinedAt: new Date(),
-            expiresAt: new Date(),
+            // expiresAt: new Date(),
+            expiresAt: null,
           },
         });
 
@@ -265,7 +363,8 @@ async function run() {
           membershipFee: session.amount_total / 100,
           // status: session,
           joinedAt: new Date(), // .toLocaleDateString("en-IN")
-          expiresAt: new Date(), // .toLocaleDateString("en-IN")
+          // expiresAt: new Date(), // .toLocaleDateString("en-IN")
+          expiresAt: null, // .toLocaleDateString("en-IN")
           bannerImage: club.bannerImage,
           description: club.description,
           location: club.location,
@@ -304,12 +403,12 @@ async function run() {
     });
 
     // * get all clubs for a member by email
-    app.get("/my-clubs/:email", async (req, res) => {
-      const email = req.params.email;
+    app.get("/my-clubs", verifyJWT, async (req, res) => {
+      // const email = req.params.email;
       // managerEmail;
       // userEmail;
       const result = await membershipsCollection
-        .find({ userEmail: email })
+        .find({ userEmail: req.tokenEmail })
         .toArray();
       res.send(result);
     });
@@ -333,11 +432,100 @@ async function run() {
       res.send(result);
     });
     // ! get all clubs for a admin / also can use club db
-    app.get("/admin-clubs", async (req, res) => {
+    app.get("/admin-clubs", verifyJWT, async (req, res) => {
       // const email = req.params.email;
       const result = await clubsCollection.find().toArray();
       res.send(result);
     });
+    //!============= admin club status updata - approved / reject ===========!//
+
+    // * admin club status updata - approved
+    app.patch("/updateClubStatusApproved/:id", verifyJWT, async (req, res) => {
+      const { email, status, updateAt } = req.body;
+      const clubId = req.params.id;
+
+      // const email = req.params.email;
+      const result = await clubsCollection.updateMany(
+        // {  managerEmail : email},
+        { _id: new ObjectId(clubId) },
+        { $set: { status, updateAt: new Date() } }
+      );
+      console.log(result);
+      res.send(result);
+    });
+    // * admin club status updata - reject
+    app.patch("/updateClubStatusReject/:id", verifyJWT, async (req, res) => {
+      const { email, status, updateAt } = req.body;
+      const clubId = req.params.id;
+      const id = { _id: new ObjectId(clubId) };
+
+      // const email = req.params.email;
+      const result = await clubsCollection.updateMany(
+        // {  managerEmail : email},
+        { _id: new ObjectId(clubId) },
+        { $set: { status, updateAt: new Date() } }
+      );
+      await clubsCollection.deleteOne(id);
+      console.log(result);
+      res.send(result);
+    });
+
+    //!=============end===========!//
+    //!============= club and event - delete  ===========!//
+
+    //*delete club
+    app.delete("/club/:id", verifyJWT, async (req, res) => {
+      const clubId = req.params.id;
+      const id = { _id: new ObjectId(clubId) };
+      const result = await clubsCollection.deleteOne(id);
+      console.log(result);
+      res.send(result);
+    });
+    //*delete event
+    app.delete("/event/:id", verifyJWT, async (req, res) => {
+      const clubId = req.params.id;
+      const id = { _id: new ObjectId(clubId) };
+      const result = await eventsCollection.deleteOne(id);
+      console.log(result);
+      res.send(result);
+    });
+    //!=============end===========!//
+    //!============= club and event - update  ===========!//
+
+    // //*update club
+    // app.delete("/club/:id", verifyJWT, async (req, res) => {
+    //   const clubId = req.params.id;
+    //   const id = { _id: new ObjectId(clubId) };
+    //   const result = await clubsCollection.deleteOne(id);
+    //   console.log(result);
+    //   res.send(result);
+    // });
+    // //*update event
+    // app.delete("/event/:id", verifyJWT, async (req, res) => {
+    //   const clubId = req.params.id;
+    //   const id = { _id: new ObjectId(clubId) };
+    //   const result = await eventsCollection.deleteOne(id);
+    //   console.log(result);
+    //   res.send(result);
+    // });
+    // //*
+    // app.put("/products/:id", async (req, res) => {
+    //   const { id } = req.params;
+    //   const data = req.body;
+    //   // console.log(data);
+    //   // console.log(id);
+    //   const ObjId = new ObjectId(id);
+    //   const filter = { _id: ObjId };
+    //   const update = { $set: data };
+
+    //   const result = await productsCollection.updateOne(filter, update);
+    //   res.send({
+    //     success: true,
+    //     result,
+    //   });
+    // });
+    //!=============end===========!//
+
     // // get all clubs for a admin by email
     // app.get("/admin-clubs/:email", async (req, res) => {
     //   const email = req.params.email;
