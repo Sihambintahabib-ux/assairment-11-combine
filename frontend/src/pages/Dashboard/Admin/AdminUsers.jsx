@@ -4,19 +4,21 @@ import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import LoadingSpinner from "../../../components/Shared/LoadingSpinner";
 import ErrorPage from "../../ErrorPage";
-import axios from "axios";
+// import axios from "axios";
 
 const AdminUsers = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
   const {
     isLoading,
     isError,
     data: adminUsers = [],
-    // refetch,
+    refetch,
   } = useQuery({
     queryKey: ["adminUsers", user?.email],
     queryFn: async () => {
-      const result = await axios(`${import.meta.env.VITE_API_URL}/user`);
+      const result = await axiosSecure(`/user`);
       return result.data;
     },
   });
@@ -69,7 +71,7 @@ const AdminUsers = () => {
                 </thead>
                 <tbody>
                   {adminUsers.map((data) => (
-                    <UserDataRow key={data._id} data={data} />
+                    <UserDataRow key={data._id} refetch={refetch} data={data} />
                   ))}
                 </tbody>
               </table>

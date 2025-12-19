@@ -75,6 +75,8 @@ async function run() {
     const userCollection = db.collection("users");
 
     //!=============START===========!//
+    //!=============save users to db===========!//
+
     //* sava data of users login or signup to db in userCollection
     app.post("/user", async (req, res) => {
       const userData = req.body;
@@ -109,14 +111,31 @@ async function run() {
       res.send({ role: result?.role });
     });
     //* get all user  from userCollection
-    app.get("/user", async (req, res) => {
+    app.get("/user", verifyJWT, async (req, res) => {
       // const email = req.params.email;
       // const email = email: req.tokenEmail ;
+      const email = req.tokenEmail;
 
-      const result = await userCollection.find().toArray();
+      const result = await userCollection
+        .find({ email: { $ne: email } })
+        .toArray();
       res.send(result);
     });
 
+    // * updata member role - admin
+    app.patch("/updateRole/:id", verifyJWT, async (req, res) => {
+      const { email, role, lastloggedAt } = req.body;
+      // const clubId = req.params.id;
+
+      // const email = req.params.email;
+      const result = await userCollection.updateMany(
+        { email: email },
+        // { _id: new ObjectId(clubId) },
+        { $set: { role, lastloggedAt: new Date() } }
+      );
+      console.log(result);
+      res.send(result);
+    });
     //!=============save add-events to db===========!//
 
     //* save add-events to db
@@ -437,8 +456,22 @@ async function run() {
       const result = await clubsCollection.find().toArray();
       res.send(result);
     });
-    //!============= admin club status updata - approved / reject ===========!//
+    //!============= admin club status updata  ===========!//
 
+    // // * admin member role updata
+    // app.patch("/updateRole/:id", verifyJWT, async (req, res) => {
+    //   const { email, role, lastloggedAt } = req.body;
+    //   // const clubId = req.params.id;
+
+    //   // const email = req.params.email;
+    //   const result = await userCollection.updateMany(
+    //     { email: email },
+    //     // { _id: new ObjectId(clubId) },
+    //     { $set: { role, lastloggedAt: new Date() } }
+    //   );
+    //   console.log(result);
+    //   res.send(result);
+    // });
     // * admin club status updata - approved
     app.patch("/updateClubStatusApproved/:id", verifyJWT, async (req, res) => {
       const { email, status, updateAt } = req.body;
@@ -475,6 +508,8 @@ async function run() {
 
     //*delete club
     app.delete("/club/:id", verifyJWT, async (req, res) => {
+      const { email, status, updateAt } = req.body;
+
       const clubId = req.params.id;
       const id = { _id: new ObjectId(clubId) };
       const result = await clubsCollection.deleteOne(id);

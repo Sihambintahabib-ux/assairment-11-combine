@@ -11,7 +11,7 @@ const ManagerClubs = () => {
     isLoading,
     isError,
     data: managerClubs = [],
-    // refetch,
+    refetch,
   } = useQuery({
     queryKey: ["managerClubs", user?.email],
     queryFn: async () => {
@@ -102,7 +102,11 @@ const ManagerClubs = () => {
                 </thead>
                 <tbody>
                   {managerClubs.map((data) => (
-                    <ManagerClubDataRow key={data._id} data={data} />
+                    <ManagerClubDataRow
+                      refetch={refetch}
+                      key={data._id}
+                      data={data}
+                    />
                   ))}
                 </tbody>
               </table>

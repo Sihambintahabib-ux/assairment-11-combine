@@ -1,7 +1,7 @@
 import { useState } from "react";
 import UpdateUserRoleModal from "../../Modal/UpdateUserRoleModal";
 
-const UserDataRow = ({ data }) => {
+const UserDataRow = ({ data, refetch }) => {
   let [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
   console.log(data.image);
@@ -43,9 +43,11 @@ const UserDataRow = ({ data }) => {
         </span>
         {/* Modal */}
         <UpdateUserRoleModal
+          data={data}
+          refetch={refetch}
           isOpen={isOpen}
           closeModal={closeModal}
-          role="customer"
+          // role="customer"
         />
       </td>
     </tr>

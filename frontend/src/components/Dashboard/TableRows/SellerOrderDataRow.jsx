@@ -48,8 +48,26 @@ const SellerOrderDataRow = ({ data, refetch }) => {
       toast.error(error.response.data.message);
     }
   };
+
+  // * delete :
+  //* function handleReject
+  const handleDelete = async () => {
+    try {
+      await axiosSecure.delete(`/club/${_id}`, {
+        email: data.managerEmail,
+        status: "reject",
+        updateAt,
+      });
+      toast.success("club delete");
+      console.log(handleReject);
+      refetch();
+    } catch (error) {
+      toast.error(error.response.data.message);
+    }
+  };
   return (
     <tr>
+      <button onClick={handleDelete}>handleDelete</button>
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex items-center">
           <div className="shrink-0">

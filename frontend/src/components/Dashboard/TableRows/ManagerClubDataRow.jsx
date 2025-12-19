@@ -1,7 +1,7 @@
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
 import UpdatePlantModal from "../../Modal/UpdatePlantModal";
-const ManagerClubDataRow = ({ data }) => {
+const ManagerClubDataRow = ({ data, refetch }) => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   console.log("ManagerClubDataRow- admin club", data);
   const {
@@ -12,6 +12,7 @@ const ManagerClubDataRow = ({ data }) => {
     status,
     bannerImage,
     category,
+    _id,
   } = data;
   let [isOpen, setIsOpen] = useState(false);
   const closeModal = () => setIsOpen(false);
@@ -73,7 +74,12 @@ const ManagerClubDataRow = ({ data }) => {
             <span className="relative">Cancel</span>
           </button>
         </div>
-        <DeleteModal isOpen={isOpen} closeModal={closeModal} />
+        <DeleteModal
+          data={data}
+          refetch={refetch}
+          isOpen={isOpen}
+          closeModal={closeModal}
+        />
       </td>
 
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
