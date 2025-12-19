@@ -29,6 +29,8 @@ import EventsManagement from "../pages/Dashboard/Manager/EventsManagement";
 import AddEvents from "../pages/Dashboard/Manager/AddEvents";
 import Events from "../components/Home/Events";
 import EventsDetails from "../pages/EventsDetails/EventsDetails";
+import ManagersRoutes from "./ManagersRoutes";
+import AdminRoutes from "./AdminRoutes";
 
 export const router = createBrowserRouter([
   {
@@ -84,38 +86,6 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "add-club",
-        element: (
-          <PrivateRoute>
-            <Addclubs></Addclubs>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "clubmembers",
-        element: (
-          <PrivateRoute>
-            <ClubMembers></ClubMembers>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "managerClubs",
-        element: (
-          <PrivateRoute>
-            <ManagerClubs></ManagerClubs>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "admin-users",
-        element: (
-          <PrivateRoute>
-            <AdminUsers />
-          </PrivateRoute>
-        ),
-      },
-      {
         path: "profile",
         element: (
           <PrivateRoute>
@@ -124,50 +94,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "my-clubs", // manager
-        element: (
-          <PrivateRoute>
-            {/* <MyOrders /> */}
-            <MyClubs></MyClubs>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "add-events",
-        element: (
-          <PrivateRoute>
-            {/* <MyOrders /> */}
-            <AddEvents></AddEvents>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "my-events",
-        element: (
-          <PrivateRoute>
-            {/* <MyOrders /> */}
-            <MyEvents></MyEvents>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "event-registrations",
-        element: (
-          <PrivateRoute>
-            <EventRegistrations></EventRegistrations>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "events-management",
-        element: (
-          <PrivateRoute>
-            <EventsManagement></EventsManagement>
-          </PrivateRoute>
-        ),
-      },
-      {
-        path: "paymenthistory",
+        path: "paymenthistory", // member
         element: (
           <PrivateRoute>
             {/* <MyOrders /> */}
@@ -176,12 +103,116 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "admin-clubs", // admin
-        element: <AdminClubs></AdminClubs>,
+        path: "my-clubs", // member
+        element: (
+          <PrivateRoute>
+            {/* <MyOrders /> */}
+            <MyClubs></MyClubs>
+          </PrivateRoute>
+        ),
       },
       {
-        path: "View-Payments",
-        element: <ViewPayments></ViewPayments>,
+        path: "my-events", // member
+        element: (
+          <PrivateRoute>
+            {/* <MyOrders /> */}
+            <MyEvents></MyEvents>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "add-club", // manager
+        element: (
+          <PrivateRoute>
+            <ManagersRoutes>
+              <Addclubs></Addclubs>
+            </ManagersRoutes>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "clubmembers", // manager
+        element: (
+          <PrivateRoute>
+            {" "}
+            <ManagersRoutes>
+              <ClubMembers></ClubMembers>
+            </ManagersRoutes>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "managerClubs", // manager
+        element: (
+          <PrivateRoute>
+            <ManagersRoutes>
+              <ManagerClubs></ManagerClubs>
+            </ManagersRoutes>
+          </PrivateRoute>
+        ),
+      },
+
+      {
+        path: "add-events", // manager
+        element: (
+          <PrivateRoute>
+            {/* <MyOrders /> */}
+            <AddEvents></AddEvents>
+          </PrivateRoute>
+        ),
+      },
+
+      {
+        path: "event-registrations", // manager
+        element: (
+          <PrivateRoute>
+            {" "}
+            <ManagersRoutes>
+              <EventRegistrations></EventRegistrations>
+            </ManagersRoutes>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "events-management", // manager
+        element: (
+          <PrivateRoute>
+            <ManagersRoutes>
+              <EventsManagement></EventsManagement>
+            </ManagersRoutes>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "admin-users", // admin
+        element: (
+          <PrivateRoute>
+            <AdminRoutes>
+              <AdminUsers />
+            </AdminRoutes>
+          </PrivateRoute>
+        ),
+      },
+
+      {
+        path: "admin-clubs", // admin
+        element: (
+          <PrivateRoute>
+            <AdminRoutes>
+              <AdminClubs></AdminClubs>,
+            </AdminRoutes>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "View-Payments", //admin
+        element: (
+          <PrivateRoute>
+            <AdminRoutes>
+              <ViewPayments></ViewPayments>,
+            </AdminRoutes>
+          </PrivateRoute>
+        ),
       },
     ],
   },

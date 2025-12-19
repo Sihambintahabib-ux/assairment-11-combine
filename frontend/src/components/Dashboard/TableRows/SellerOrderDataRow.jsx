@@ -54,15 +54,17 @@ const SellerOrderDataRow = ({ data, refetch }) => {
   const handleDelete = async () => {
     try {
       await axiosSecure.delete(`/club/${_id}`, {
-        email: data.managerEmail,
-        status: "reject",
-        updateAt,
+        data: {
+          email: data.managerEmail,
+          status: "reject",
+          updateAt,
+        },
       });
       toast.success("club delete");
       console.log(handleReject);
       refetch();
     } catch (error) {
-      toast.error(error.response.data.message);
+      toast.error(error);
     }
   };
   return (
