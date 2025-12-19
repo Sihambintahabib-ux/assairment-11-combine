@@ -12,10 +12,13 @@ import {
 import LoadingSpinner from "../Shared/LoadingSpinner";
 import ErrorPage from "../../pages/ErrorPage";
 import { TbFidgetSpinner } from "react-icons/tb";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useNavigate } from "react-router";
 
 const AddEventForm = () => {
   //*
   const { user } = useAuth();
+  const navigate = useNavigate();
   const {
     isLoading: clubsLoading,
     isError: clubsError,
@@ -37,6 +40,8 @@ const AddEventForm = () => {
   //*
   //   const { user } = useAuth();
   const queryClient = useQueryClient();
+  const axiosSecure = useAxiosSecure();
+
   // useMutation hook case :
   // Mutations
   const {
@@ -55,6 +60,7 @@ const AddEventForm = () => {
       console.log("onsuccess", data);
       //ADD TOAST
       toast.success("add event Successful");
+      navigate("/dashboard/events-management");
       //reset form after post completed
       mutatereset();
       //navigate to page

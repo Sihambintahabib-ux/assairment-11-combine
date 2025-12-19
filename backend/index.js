@@ -73,7 +73,28 @@ async function run() {
     const membershipsCollection = db.collection("memberships"); // ordersCollection
     const paymentsCollection = db.collection("payments");
     const userCollection = db.collection("users");
+    //!=============Role Middleware===========!//
 
+    // Role Middleware - admin
+    const verifyAdmin = async (req, res, next) => {
+      const email = req.tokenEmail;
+      const user = await userCollection.findOne({ email });
+      if (user?.role !== "admin")
+        return res
+          .status(403)
+          .send({ message: "admin action!", role: user.role });
+      next();
+    };
+    // Role Middleware - manager
+    const verifyManager = async (req, res, next) => {
+      const email = req.tokenEmail;
+      const user = await userCollection.findOne({ email });
+      if (user?.role !== "menager")
+        return res
+          .status(403)
+          .send({ message: "menager action!", role: user.role });
+      next();
+    };
     //!=============START===========!//
     //!=============save users to db===========!//
 
@@ -139,14 +160,14 @@ async function run() {
     //!=============save add-events to db===========!//
 
     //* save add-events to db
-    app.post("/events", async (req, res) => {
+    app.post("/events", verifyJWT, verifyManager, async (req, res) => {
       const eventData = req.body; //plantsdata =1.5
       // console.log(clubData);
       const result = await eventsCollection.insertOne(eventData);
       res.send(result);
     });
     // *get all events from db
-    app.get("/events", async (req, res) => {
+    app.get("/events", verifyJWT, verifyManager, async (req, res) => {
       const result = await eventsCollection.find().toArray();
       // console.log(result);
       res.send(result);
@@ -224,7 +245,7 @@ async function run() {
     //!=============end===========!//
 
     //*save add-club to db
-    app.post("/clubs", async (req, res) => {
+    app.post("/clubs", verifyJWT, verifyManager, async (req, res) => {
       const clubData = req.body; //plantsdata =1.5
       // console.log(clubData);
       const result = await clubsCollection.insertOne(clubData);
@@ -509,7 +530,6 @@ async function run() {
     //*delete club
     app.delete("/club/:id", verifyJWT, async (req, res) => {
       const { email, status, updateAt } = req.body;
-
       const clubId = req.params.id;
       const id = { _id: new ObjectId(clubId) };
       const result = await clubsCollection.deleteOne(id);

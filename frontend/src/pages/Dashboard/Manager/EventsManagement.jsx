@@ -12,7 +12,7 @@ const EventsManagement = () => {
     isLoading,
     isError,
     data: managerEvents = [],
-    // refetch,
+    refetch,
   } = useQuery({
     queryKey: ["managerEvents", user?.email],
     queryFn: async () => {
@@ -110,7 +110,11 @@ const EventsManagement = () => {
                 </thead>
                 <tbody>
                   {managerEvents.map((data) => (
-                    <ManagerEventDataRow key={data._id} data={data} />
+                    <ManagerEventDataRow
+                      key={data._id}
+                      refetch={refetch}
+                      data={data}
+                    />
                   ))}
                 </tbody>
               </table>

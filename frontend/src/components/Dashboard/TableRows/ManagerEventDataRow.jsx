@@ -4,7 +4,7 @@ import DeleteModal from "../../Modal/DeleteModal";
 import UpdatePlantModal from "../../Modal/UpdatePlantModal";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
-const ManagerEventDataRow = ({ data }) => {
+const ManagerEventDataRow = ({ data, refetch }) => {
   let [isOpen, setIsOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   console.log(data);
@@ -97,7 +97,12 @@ const ManagerEventDataRow = ({ data }) => {
           <span className="relative">Cancel</span>
         </button>
         {/* </div> */}
-        <DeleteModal isOpen={isOpen} closeModal={closeModal} />
+        <DeleteModal
+          refetch={refetch}
+          data={data}
+          isOpen={isOpen}
+          closeModal={closeModal}
+        />
       </td>
     </tr>
     // </div>

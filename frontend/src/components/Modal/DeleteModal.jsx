@@ -9,7 +9,7 @@ const DeleteModal = ({ closeModal, isOpen, data, refetch }) => {
 
   const handleDelete = async () => {
     try {
-      await axiosSecure.delete(`/club/${data?._id}`, {
+      await axiosSecure.delete(`/event/${data?._id}`, {
         data: {
           email: data.managerEmail,
           status: "reject",
@@ -25,7 +25,7 @@ const DeleteModal = ({ closeModal, isOpen, data, refetch }) => {
           error.message ||
           "Failed to delete club"
       );
-      console.log(handleDelete);
+      console.log(error);
     } finally {
       closeModal();
     }
