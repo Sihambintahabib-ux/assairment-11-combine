@@ -95,6 +95,25 @@ async function run() {
           .send({ message: "menager action!", role: user.role });
       next();
     };
+
+    //!=============search===========!//
+    app.get("/search", async (req, res) => {
+      const searchText = req.query.searchText;
+      const query = {};
+      if (searchText) {
+        query.clubName = { $regex: searchText, $options: "i" };
+      }
+      console.log(searchText, query);
+      const result = await clubsCollection
+        .find(query)
+        .sort({ createdAt: -1 })
+        .toArray();
+      // const result = await clubsCollection
+      //   .find({ productName: { $regex: searchText, $options: "i" } })
+      //   .sort({ createdAt: -1 })
+      //   .toArray();
+      res.send(result);
+    });
     //!=============START===========!//
     //!=============save users to db===========!//
 
@@ -253,7 +272,13 @@ async function run() {
     });
     // *get all club from db
     app.get("/clubs", async (req, res) => {
-      const result = await clubsCollection.find().toArray();
+      const searchText = req.query.searchText;
+      const query = {};
+      if (searchText) {
+        query.clubName = { $regex: searchText, $options: "i" };
+      }
+      const result = await clubsCollection.find(query).toArray();
+
       // console.log(result);
       res.send(result);
     });

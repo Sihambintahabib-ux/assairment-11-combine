@@ -51,7 +51,7 @@ const AddEventForm = () => {
     reset: mutatereset,
   } = useMutation({
     mutationFn: async (edata) => {
-      return await axios.post(`${import.meta.env.VITE_API_URL}/events`, edata);
+      return await axiosSecure.post(`/events`, edata);
     },
     onMutate: (edata) => {
       // console.log("I will post this data--->", edata);

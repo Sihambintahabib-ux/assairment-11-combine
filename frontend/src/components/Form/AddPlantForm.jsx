@@ -11,9 +11,12 @@ import {
 import LoadingSpinner from "../Shared/LoadingSpinner";
 import ErrorPage from "../../pages/ErrorPage";
 import { TbFidgetSpinner } from "react-icons/tb";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const AddPlantForm = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+
   const queryClient = useQueryClient();
   // useMutation hook case :
   // Mutations
@@ -24,7 +27,7 @@ const AddPlantForm = () => {
     reset: mutatereset,
   } = useMutation({
     mutationFn: async (cdata) => {
-      return await axios.post(`${import.meta.env.VITE_API_URL}/clubs`, cdata);
+      return await axiosSecure.post(`/clubs`, cdata);
     },
     onMutate: (cdata) => {
       console.log("I will post this data--->", cdata);
