@@ -1,6 +1,6 @@
 import Card from "./Card";
 import Container from "../Shared/Container";
-import axios from "axios";
+// import axios from "axios";
 import {
   QueryClient,
   QueryClientProvider,
@@ -9,23 +9,34 @@ import {
 import LoadingSpinner from "../Shared/LoadingSpinner";
 import ErrorPage from "../../pages/ErrorPage";
 import EventCard from "./EventCard";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useState } from "react";
+import useDebounce from "../../hooks/useDebounce";
+import Search from "../Shared/Search";
 
 const Events = () => {
+  const axiosSecure = useAxiosSecure();
+  const [searchText, setsearchText] = useState(""); //*search state
+  const Debounceseearch = useDebounce(searchText, 300); //*search hook Debounceseearch
   const {
     isLoading,
     isError,
     data: events = [],
     // refetch,
   } = useQuery({
-    queryKey: ["events"],
+    queryKey: ["events", Debounceseearch], //* Debounceseearch call for change
     queryFn: async () => {
-      const result = await axios(`${import.meta.env.VITE_API_URL}/events`);
+      const result = await axiosSecure(
+        `/events?searchText=${encodeURIComponent(
+          Debounceseearch //*search url query
+        )}`
+      );
       return result.data;
     },
   });
-  console.log(events);
-  if (isLoading) return <LoadingSpinner></LoadingSpinner>;
-  if (isError) return <ErrorPage></ErrorPage>;
+  console.log({ events, Debounceseearch }); //* console Debounceseearch
+  // if (isLoading) return <LoadingSpinner></LoadingSpinner>;
+  // if (isError) return <ErrorPage></ErrorPage>;
   return (
     <Container>
       <div className="text-center">
@@ -33,16 +44,25 @@ const Events = () => {
           Events
         </h1>
       </div>
+      {/* search components */}
+      <div className="flex justify-between mt-10">
+        <Search searchText={searchText} setsearchText={setsearchText}></Search>
+        <p>d</p>
+      </div>
       {events && events.length > 0 ? (
         <div
-          className="pt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4   xl:grid-cols-5  2xl:grid-cols-6 
+          className="pt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4   xl:grid-cols-4  2xl:grid-cols-6 
 
         gap-8"
         >
-          {console.log("inner", events)}
-          {events.map((data) => (
-            <EventCard key={data._id} data={data} />
-          ))}
+          {/* {console.log("inner", events)} */}
+          {isLoading ? (
+            <LoadingSpinner></LoadingSpinner> //* search loading
+          ) : isError ? (
+            <ErrorPage></ErrorPage> //* search error
+          ) : (
+            events.map((data) => <EventCard key={data._id} data={data} />)
+          )}
         </div>
       ) : null}
     </Container>

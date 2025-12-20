@@ -97,23 +97,27 @@ async function run() {
     };
 
     //!=============search===========!//
-    app.get("/search", async (req, res) => {
-      const searchText = req.query.searchText;
-      const query = {};
-      if (searchText) {
-        query.clubName = { $regex: searchText, $options: "i" };
-      }
-      console.log(searchText, query);
-      const result = await clubsCollection
-        .find(query)
-        .sort({ createdAt: -1 })
-        .toArray();
-      // const result = await clubsCollection
-      //   .find({ productName: { $regex: searchText, $options: "i" } })
-      //   .sort({ createdAt: -1 })
-      //   .toArray();
-      res.send(result);
-    });
+    // app.get("/search", async (req, res) => {
+    //   //**  start
+    //   const searchText = req.query.searchText;
+    //   const query = {};
+    //   if (searchText) {
+    //     query.clubName = { $regex: searchText, $options: "i" };
+    //   }
+
+    //   //* end
+
+    //   console.log(searchText, query);
+    //   const result = await clubsCollection
+    //     .find(query)
+    //     .sort({ createdAt: -1 })
+    //     .toArray();
+    //   // const result = await clubsCollection
+    //   //   .find({ productName: { $regex: searchText, $options: "i" } })
+    //   //   .sort({ createdAt: -1 })
+    //   //   .toArray();
+    //   res.send(result);
+    // });
     //!=============START===========!//
     //!=============save users to db===========!//
 
@@ -186,8 +190,16 @@ async function run() {
       res.send(result);
     });
     // *get all events from db
-    app.get("/events", verifyJWT, verifyManager, async (req, res) => {
-      const result = await eventsCollection.find().toArray();
+    app.get("/events", verifyJWT, async (req, res) => {
+      //**  start
+      const searchText = req.query.searchText;
+      const query = {};
+      if (searchText) {
+        query.title = { $regex: searchText, $options: "i" };
+      }
+
+      //* end
+      const result = await eventsCollection.find(query).toArray(); //* call the query in find
       // console.log(result);
       res.send(result);
     });

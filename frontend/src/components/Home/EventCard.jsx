@@ -26,9 +26,9 @@ const EventCard = ({ data }) => {
           />
 
           {/* Category Badge */}
-          <span className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-gray-700 shadow">
+          {/* <span className="absolute top-3 right-3 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold text-gray-700 shadow">
             {maxAttendees}
-          </span>
+          </span> */}
         </div>
 
         {/* Content */}

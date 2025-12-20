@@ -54,10 +54,10 @@ const Search = ({ searchText, setsearchText }) => {
   // if (isError) return <ErrorPage></ErrorPage>;
   return (
     <div>
-      <p>search: {searchText}</p>
+      {/* <p>search: {searchText}</p> */}
       <form
         // onSubmit={handlesearch}
-        className="flex items-center justify-center gap-5 mb-8 "
+        className="flex  items-center justify-center gap-5 mb-8 "
       >
         <label className="input border  rounded-full w-1xl ">
           <svg
@@ -84,7 +84,7 @@ const Search = ({ searchText, setsearchText }) => {
           />
         </label>
         {/* <div> */}
-        <button className="btn btn-secondary rounded-full ">Search</button>
+        {/* <button className="btn btn-secondary rounded-full ">Search</button> */}
         {/* </div> */}
       </form>
     </div>

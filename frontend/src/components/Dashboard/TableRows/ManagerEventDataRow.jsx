@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import DeleteModal from "../../Modal/DeleteModal";
 import UpdatePlantModal from "../../Modal/UpdatePlantModal";
-import useAxiosSecure from "../../../hooks/useAxiosSecure";
+// import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ManagerEventDataRow = ({ data, refetch }) => {
   let [isOpen, setIsOpen] = useState(false);
@@ -13,10 +13,10 @@ const ManagerEventDataRow = ({ data, refetch }) => {
     description,
     eventDate,
     location,
+    _id,
     isPaid,
     eventFee,
     maxAttendees,
-    _id,
     // update,
     // delete,
     // clubName,
@@ -99,6 +99,7 @@ const ManagerEventDataRow = ({ data, refetch }) => {
         {/* </div> */}
         <DeleteModal
           refetch={refetch}
+          api={`/event/${data?._id}`}
           data={data}
           isOpen={isOpen}
           closeModal={closeModal}

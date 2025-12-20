@@ -2,14 +2,16 @@ import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 
-const DeleteModal = ({ closeModal, isOpen, data, refetch }) => {
+const DeleteModal = ({ closeModal, isOpen, data, refetch, api }) => {
   // * delete :
   //* function handleReject
   const axiosSecure = useAxiosSecure();
+  // const api = `/event/${data?._id}`;
 
   const handleDelete = async () => {
     try {
-      await axiosSecure.delete(`/event/${data?._id}`, {
+      // await axiosSecure.delete(`/event/${data?._id}`
+      await axiosSecure.delete(`${api}`, {
         data: {
           email: data.managerEmail,
           status: "reject",
