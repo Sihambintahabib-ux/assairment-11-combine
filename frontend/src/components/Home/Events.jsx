@@ -15,6 +15,7 @@ import useDebounce from "../../hooks/useDebounce";
 import Search from "../Shared/Search";
 import Filter from "../Shared/Filter";
 import Sort from "../Shared/Sort";
+import axios from "axios";
 
 const Events = () => {
   const axiosSecure = useAxiosSecure();
@@ -33,11 +34,11 @@ const Events = () => {
   } = useQuery({
     queryKey: ["events", Debounceseearch, selectedCategory, sort, order], //* Debounceseearch call for change
     queryFn: async () => {
-      const result = await axiosSecure(
-        `/events?searchText=${encodeURIComponent(
-          Debounceseearch //*search url query - Debounceseearch + filter
+      const result = await axios(
+        `${import.meta.env.VITE_API_URL}/events?searchText=${encodeURIComponent(
+          Debounceseearch
         )}&selectedCategory=${selectedCategory}&sort=${sort}&order=${order}`
-      );
+      ); //*search url query - Debounceseearch + filter
       return result.data;
     },
   });

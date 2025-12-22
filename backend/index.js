@@ -12,6 +12,7 @@ const port = process.env.PORT || 3000;
 //add strine key :
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 
+// vercel deploy
 const decoded = Buffer.from(process.env.FB_SERVICE_KEY, "base64").toString(
   "utf-8"
 );
@@ -191,7 +192,7 @@ async function run() {
     });
 
     // *get all events from db + search
-    app.get("/events", verifyJWT, async (req, res) => {
+    app.get("/events", async (req, res) => {
       const searchText = req.query.searchText; //* search
       const selectedCategory = req.query.selectedCategory; //* filter
       //**   search
@@ -506,7 +507,7 @@ async function run() {
           // status: session,
           joinedAt: new Date(), // .toLocaleDateString("en-IN")
           // expiresAt: new Date(), // .toLocaleDateString("en-IN")
-          expiresAt: null, // .toLocaleDateString("en-IN")
+          expiresAt: "null", // .toLocaleDateString("en-IN")
           bannerImage: club.bannerImage,
           description: club.description,
           location: club.location,

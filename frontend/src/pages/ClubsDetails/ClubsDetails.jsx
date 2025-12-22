@@ -3,12 +3,13 @@ import Heading from "../../components/Shared/Heading";
 import Button from "../../components/Shared/Button/Button";
 import PurchaseModal from "../../components/Modal/PurchaseModal";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { Link, Links, useParams } from "react-router";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 import ErrorPage from "../ErrorPage";
+import ClubMemberJoin from "../../components/Modal/ClubMemberJoin";
 // import useAuth from "../../hooks/useAuth";
 
 const ClubsDetails = () => {
@@ -115,17 +116,20 @@ const ClubsDetails = () => {
               Price: ${membershipFee}
             </p>
             <div>
+              {" "}
               <Button onClick={() => setIsOpen(true)} label="Join now" />
             </div>
           </div>
           <hr className="my-6" />
+          {/* <Link to="/"> */}
 
-          <PurchaseModal
+          <ClubMemberJoin
             id={id}
             clubs={clubs}
             closeModal={closeModal}
             isOpen={isOpen}
-          />
+          ></ClubMemberJoin>
+          {/* </Link> */}
         </div>
       </div>
     </Container>

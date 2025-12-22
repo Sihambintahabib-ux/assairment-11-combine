@@ -37,8 +37,9 @@ const Clubs = () => {
     queryFn: async () => {
       const result = await axios(
         `${import.meta.env.VITE_API_URL}/clubs?searchText=${encodeURIComponent(
-          Debounceseearch //*search url query - Debounceseearch + filter
+          Debounceseearch
         )}&selectedCategory=${selectedCategory}&sort=${sort}&order=${order}`
+        //*search url query - Debounceseearch + filter
         //*set search url query - for Debounceseearch (? query symbol ) "?searchText=${encodeURIComponent(Debounceseearch)}"+ for filter : "&selectedCategory=${selectedCategory}" + for sort: "&selectedSort=${selectedSort}" + for order : &SortOrder=${SortOrder}
       );
 

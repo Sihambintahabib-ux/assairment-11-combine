@@ -3,13 +3,14 @@ import Heading from "../../components/Shared/Heading";
 import Button from "../../components/Shared/Button/Button";
 import PurchaseModal from "../../components/Modal/PurchaseModal";
 import { useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 
 import LoadingSpinner from "../../components/Shared/LoadingSpinner";
 import ErrorPage from "../ErrorPage";
 import EventJoinModel from "../../components/Modal/EventJoinModel";
+import toast from "react-hot-toast";
 // import useAuth from "../../hooks/useAuth";
 
 const EventsDetails = () => {
@@ -124,9 +125,17 @@ const EventsDetails = () => {
             <p className="font-bold text-3xl text-gray-500">
               Price: ${eventFee}
             </p>
-            <div>
-              <Button onClick={() => setIsOpen(true)} label="Join now" />
-            </div>
+            <Link to="/dashboard/my-events">
+              <div>
+                <Button
+                  onClick={() => {
+                    setIsOpen(true);
+                    toast.success("event joint successfull");
+                  }}
+                  label="Join now"
+                />
+              </div>
+            </Link>
           </div>
           <hr className="my-6" />
 

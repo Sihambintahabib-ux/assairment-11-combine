@@ -48,7 +48,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/clubs/:id",
-        element: <ClubsDetails />,
+        element: (
+          <PrivateRoute>
+            <ClubsDetails />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/events",
@@ -57,7 +61,11 @@ export const router = createBrowserRouter([
 
       {
         path: "/events/:id",
-        element: <EventsDetails />,
+        element: (
+          <PrivateRoute>
+            <EventsDetails />
+          </PrivateRoute>
+        ),
       },
 
       {
@@ -102,6 +110,15 @@ export const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      // {
+      //   path: "payment-success", // member
+      //   element: (
+      //     <PrivateRoute>
+      //       {/* <MyOrders /> */}
+      //       <PaymentSuccess></PaymentSuccess>
+      //     </PrivateRoute>
+      //   ),
+      // },
       {
         path: "my-clubs", // member
         element: (

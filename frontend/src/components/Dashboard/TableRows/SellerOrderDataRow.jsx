@@ -69,7 +69,7 @@ const SellerOrderDataRow = ({ data, refetch }) => {
   };
   return (
     <tr>
-      <button onClick={handleDelete}>handleDelete</button>
+      {/* <button onClick={handleDelete}>handleDelete</button> */}
       <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
         <div className="flex items-center">
           <div className="shrink-0">

@@ -20,7 +20,7 @@ const PurchaseModal = ({ closeModal, isOpen, clubs, id }) => {
     status,
     // updateAt,
   } = clubs || {};
-  const email = user.email;
+  const email = user.email || "";
   const handlePayment = async () => {
     const PaymentInfo = {
       // clubId: new ObjectId(_id),
