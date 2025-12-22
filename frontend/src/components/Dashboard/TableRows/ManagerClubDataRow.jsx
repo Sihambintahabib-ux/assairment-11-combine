@@ -63,6 +63,8 @@ const ManagerClubDataRow = ({ data, refetch }) => {
           <span className="relative">Update</span>
         </span>
         <UpdatePlantModal
+          data={data} //*
+          refetch={refetch} //*
           isOpen={isEditModalOpen}
           setIsEditModalOpen={setIsEditModalOpen}
         />
@@ -90,9 +92,9 @@ const ManagerClubDataRow = ({ data, refetch }) => {
           </button>
         </div>
         <DeleteModal
-          data={data}
-          api={`/club/${data?._id}`}
-          refetch={refetch}
+          data={data} //*
+          api={`/club/${data?._id}`} //*
+          refetch={refetch} //*
           isOpen={isOpen}
           closeModal={closeModal}
         />

@@ -19,6 +19,7 @@ const AddEventForm = () => {
   //*
   const { user } = useAuth();
   const navigate = useNavigate();
+  // * get all club data :
   const {
     isLoading: clubsLoading,
     isError: clubsError,
@@ -35,7 +36,7 @@ const AddEventForm = () => {
   });
 
   // console.table("managerClubs", managerClubs);
-  // console.table(managerClubs);
+  console.table("managerClubs", managerClubs);
 
   //*
   //   const { user } = useAuth();
@@ -91,7 +92,8 @@ const AddEventForm = () => {
 
   const onSubmit = async (data) => {
     // const { name, price, location, image, description, category } = data;
-    // console.log("----------", data);
+    console.log("----------", data);
+    console.log("----------category", data.category);
 
     try {
       //* img :
@@ -129,7 +131,7 @@ const AddEventForm = () => {
         // clubName2: data.category || "",
         // price: data.price,
         // description: data.description,
-        // category,
+        category: selectedClub.category,
         // location,
         // membershipFee: Number(price),
         // status: "pending",
@@ -139,6 +141,7 @@ const AddEventForm = () => {
         updateAt: new Date(),
         bannerImage: imgURL,
       };
+
       // const { data } = await axios.post(
       //   `${import.meta.env.VITE_API_URL}/clubs`,
       //   clubData

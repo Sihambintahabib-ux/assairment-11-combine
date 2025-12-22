@@ -189,20 +189,44 @@ async function run() {
       const result = await eventsCollection.insertOne(eventData);
       res.send(result);
     });
-    // *get all events from db
+
+    // *get all events from db + search
     app.get("/events", verifyJWT, async (req, res) => {
-      //**  start
-      const searchText = req.query.searchText;
+      const searchText = req.query.searchText; //* search
+      const selectedCategory = req.query.selectedCategory; //* filter
+      //**   search
+      // const searchText = req.query.searchText;
       const query = {};
       if (searchText) {
         query.title = { $regex: searchText, $options: "i" };
       }
 
-      //* end
-      const result = await eventsCollection.find(query).toArray(); //* call the query in find
+      //* filter
+      if (selectedCategory && selectedCategory !== "all") {
+        query.category = selectedCategory;
+      }
+
+      // * sort
+      const sortMap = {
+        newest: { eventDate: 1 },
+        oldest: { eventDate: -1 },
+        az: { title: 1 },
+        za: { title: -1 },
+        feelow: { membershipFee: 1 },
+        feehigh: { membershipFee: -1 },
+      };
+
+      const sortQuery = sortMap[req.query.sort] || { createdAt: -1 };
+      const result = await eventsCollection
+        .find(query) // * add query in find for search
+        .sort(sortQuery) // * add Sort in sort for Sort
+        .toArray(); //* call the query in find
       // console.log(result);
       res.send(result);
     });
+
+    //!
+
     // *get one events from db - eventdetails page
     app.get("/events/:id", async (req, res) => {
       const id = req.params.id;
@@ -282,14 +306,55 @@ async function run() {
       const result = await clubsCollection.insertOne(clubData);
       res.send(result);
     });
-    // *get all club from db
+    // *get all club from db + search
     app.get("/clubs", async (req, res) => {
-      const searchText = req.query.searchText;
+      const searchText = req.query.searchText; //* search
+      const selectedCategory = req.query.selectedCategory; //* filter
+      // const selectedSort = req.query.selectedSort; //*sort
+      // const SortOrder = req.query.SortOrder; //*order
+      const { sort = "newest", order = "asc" } = req.query;
+
+      console.log(req.query);
+      // console.log(`SortOrder`, {
+      //   // searchText,
+      //   // selectedCategory,
+      //   // selectedSort,
+      //   // SortOrder,
+      //   short,
+      //   order,
+      // });
+
+      // const sortOption = {};
+      // sortOption[short || "newest"] = order === "desc" ? -1 : 1;
+      // if (short === "newest") sortOption.createdAt = -1;
+      // else if (short === "oldest") sortOption.createdAt = 1;
+
+      //* search :
       const query = {};
       if (searchText) {
         query.clubName = { $regex: searchText, $options: "i" };
       }
-      const result = await clubsCollection.find(query).toArray();
+      //* filter
+      if (selectedCategory && selectedCategory !== "all") {
+        query.category = selectedCategory;
+      }
+
+      // * sort
+      const sortMap = {
+        newest: { createdAt: 1 },
+        oldest: { createdAt: -1 },
+        az: { clubName: 1 },
+        za: { clubName: -1 },
+        feelow: { membershipFee: 1 },
+        feehigh: { membershipFee: -1 },
+      };
+
+      const sortQuery = sortMap[req.query.sort] || { createdAt: -1 };
+      //*
+      const result = await clubsCollection
+        .find(query) // * add query in find for search
+        .sort(sortQuery) // * add Sort in sort for Sort
+        .toArray();
 
       // console.log(result);
       res.send(result);
@@ -585,13 +650,27 @@ async function run() {
     //!============= club and event - update  ===========!//
 
     // //*update club
-    // app.delete("/club/:id", verifyJWT, async (req, res) => {
+    // app.patch("/club/:id", verifyJWT, async (req, res) => {
     //   const clubId = req.params.id;
     //   const id = { _id: new ObjectId(clubId) };
-    //   const result = await clubsCollection.deleteOne(id);
+    // const updateData = req.body; // const updateData = req.body;
+    // const update = { $set: updateData };
+
+    //   const result = await clubsCollection.updateOne(filter, update);
     //   console.log(result);
-    //   res.send(result);
+    //  res.send({
+    //    success: true,
+    //    result,
+    //  });
     // });
+
+    // const result = await productsCollection.updateOne(filter, update);
+    // res.send({
+    //   success: true,
+    //   result,
+    // });
+
+    //*
     // //*update event
     // app.delete("/event/:id", verifyJWT, async (req, res) => {
     //   const clubId = req.params.id;
@@ -601,6 +680,8 @@ async function run() {
     //   res.send(result);
     // });
     // //*
+
+    //*update export product :
     // app.put("/products/:id", async (req, res) => {
     //   const { id } = req.params;
     //   const data = req.body;
@@ -616,6 +697,7 @@ async function run() {
     //     result,
     //   });
     // });
+    //*
     //!=============end===========!//
 
     // // get all clubs for a admin by email
