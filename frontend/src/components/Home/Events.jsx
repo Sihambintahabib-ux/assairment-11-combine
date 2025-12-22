@@ -59,7 +59,7 @@ const Events = () => {
         </h1>
       </div>
       {/* search components */}
-      <div className="flex justify-between mt-14 gap-5">
+      <div className="flex-col md:flex  justify-between mt-14 gap-5">
         {/* search + filter components */}
         <div className="flex justify-center  gap-5">
           <Search
@@ -67,18 +67,20 @@ const Events = () => {
             setsearchText={setsearchText}
           ></Search>
           {/* //* filter components */}
-          <Filter
-            selectedCategory={selectedCategory}
-            datas={events}
-            setSelectedCategory={setSelectedCategory}
-          ></Filter>
-          {/* //* CONDITION OF filter components - filter tag show condition*/}
-          {selectedCategory !== "all" && (
-            <div className="badge badge-secondary gap-2">
-              Category: {selectedCategory}
-              <button onClick={() => setSelectedCategory("all")}>✕</button>
-            </div>
-          )}
+          <div className="flex-col md:flex ">
+            <Filter
+              selectedCategory={selectedCategory}
+              datas={events}
+              setSelectedCategory={setSelectedCategory}
+            ></Filter>
+            {/* //* CONDITION OF filter components - filter tag show condition*/}
+            {selectedCategory !== "all" && (
+              <div className="badge badge-secondary gap-2">
+                {selectedCategory}
+                <button onClick={() => setSelectedCategory("all")}>✕</button>
+              </div>
+            )}
+          </div>
         </div>
         {/* Sort components */}
         <div>

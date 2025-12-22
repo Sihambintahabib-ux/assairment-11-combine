@@ -48,7 +48,7 @@ const Card = ({ club }) => {
         {/* Button */}
         <button
           // to={`/clubs/${_id}`}
-          className="w-full text-center py-2 rounded-xl bg-orange-400 hover:bg-orange-700 transition font-semibold shadow"
+          className="w-full text-center py-2 rounded-xl text-white bg-orange-400 hover:bg-orange-700 transition font-semibold shadow"
         >
           View Details
         </button>

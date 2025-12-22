@@ -28,7 +28,7 @@ const EventLoop = () => {
   return (
     <div>
       <div className="mt-12">
-        <h3 className="text-2xl font-bold text-center mb-6">
+        <h3 className="text-3xl md:text-4xl text-orange-500 font-bold text-center mb-6">
           Our Upcomming Events
         </h3>
         <div className="overflow-hidden">
